@@ -1,6 +1,6 @@
 version: "1"
 rules:
-  - base: master
-    upstream: null:master
+  - base: main
+    upstream: apache:main
     mergeMethod: merge
     mergeUnstable: true
