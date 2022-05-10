@@ -12,7 +12,7 @@ on:
         - DEBUG
   push:
     branches:
-      - master
+      - main
 jobs:
   boost_security_sast:
     name: Boost Security / Native Scanner
