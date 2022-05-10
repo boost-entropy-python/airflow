@@ -35,6 +35,7 @@ SKIP_CHECK_REMOTE_IMAGE = False
 ALLOWED_PYTHON_MAJOR_MINOR_VERSIONS = ['3.7', '3.8', '3.9', '3.10']
 DEFAULT_PYTHON_MAJOR_MINOR_VERSION = ALLOWED_PYTHON_MAJOR_MINOR_VERSIONS[0]
 ALLOWED_BACKENDS = ['sqlite', 'mysql', 'postgres', 'mssql']
+ALLOWED_PROD_BACKENDS = ['mysql', 'postgres', 'mssql']
 DEFAULT_BACKEND = ALLOWED_BACKENDS[0]
 ALLOWED_INTEGRATIONS = [
     'cassandra',
@@ -54,7 +55,8 @@ ALLOWED_KIND_VERSIONS = ['v0.12.0']
 ALLOWED_HELM_VERSIONS = ['v3.6.3']
 ALLOWED_EXECUTORS = ['KubernetesExecutor', 'CeleryExecutor', 'LocalExecutor', 'CeleryKubernetesExecutor']
 ALLOWED_KIND_OPERATIONS = ['start', 'stop', 'restart', 'status', 'deploy', 'test', 'shell', 'k9s']
-ALLOWED_GENERATE_CONSTRAINTS_MODES = ['source-providers', 'pypi-providers', 'no-providers']
+ALLOWED_CONSTRAINTS_MODES_CI = ['constraints-source-providers', 'constraints', 'constraints-no-providers']
+ALLOWED_CONSTRAINTS_MODES_PROD = ['constraints', 'constraints-no-providers', 'constraints-source-providers']
 
 MOUNT_SELECTED = "selected"
 MOUNT_ALL = "all"
@@ -83,8 +85,9 @@ ALLOWED_PACKAGE_FORMATS = ['wheel', 'sdist', 'both']
 ALLOWED_INSTALLATION_PACKAGE_FORMATS = ['wheel', 'sdist']
 ALLOWED_INSTALLATION_METHODS = ['.', 'apache-airflow']
 ALLOWED_DEBIAN_VERSIONS = ['bullseye', 'buster']
-ALLOWED_BUILD_CACHE = ["pulled", "local", "disabled"]
-ALLOWED_PLATFORMS = ["linux/amd64", "linux/arm64", "linux/amd64,linux/arm64"]
+ALLOWED_BUILD_CACHE = ["registry", "local", "disabled"]
+MULTI_PLATFORM = "linux/amd64,linux/arm64"
+ALLOWED_PLATFORMS = ["linux/amd64", "linux/arm64", MULTI_PLATFORM]
 ALLOWED_USE_AIRFLOW_VERSIONS = ['none', 'wheel', 'sdist']
 
 PARAM_NAME_DESCRIPTION = {
