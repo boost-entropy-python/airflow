@@ -1,4 +1,4 @@
-#
+#!/usr/bin/python
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,19 +15,10 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-from datetime import datetime
-from time import sleep
 
-from airflow.models import DAG
-from airflow.operators.python import PythonOperator
+import pyspark
 
-DEFAULT_DATE = datetime(2016, 1, 1)
-
-args = {
-    'owner': 'airflow',
-    'start_date': DEFAULT_DATE,
-}
-
-
-dag = DAG(dag_id='test_mark_success', default_args=args)
-task = PythonOperator(task_id='task1', python_callable=lambda x: sleep(x), op_args=[600], dag=dag)
+sc = pyspark.SparkContext()
+rdd = sc.parallelize(['Hello,', 'world!'])
+words = sorted(rdd.collect())
+print(words)
