@@ -637,9 +637,9 @@ ${{ hashFiles('.pre-commit-config.yaml') }}"
       - name: "Static checks"
         run: breeze static-checks --all-files --show-diff-on-failure --color always
         env:
-          VERBOSE: false
+          VERBOSE: "false"
           SKIP: "identity"
-          COLUMNS: 250
+          COLUMNS: "250"
       - name: "Fix ownership"
         run: breeze fix-ownership
         if: always()
@@ -654,8 +654,6 @@ ${{ hashFiles('.pre-commit-config.yaml') }}"
     needs: [build-info]
     env:
       RUNS_ON: ${{ fromJson(needs.build-info.outputs.runsOn) }}
-      SKIP: "build,run-mypy,run-flake8,lint-javascript,update-migration-references,identity"
-      MOUNT_SELECTED_LOCAL_SOURCES: "true"
     if: needs.build-info.outputs.basic-checks-only == 'true'
     steps:
       - name: Cleanup repo
@@ -695,7 +693,10 @@ ${{ hashFiles('.pre-commit-config.yaml') }}"
           breeze static-checks --all-files --show-diff-on-failure --color always
           --commit-ref "${{ github.sha }}"
         env:
-          VERBOSE: false
+          VERBOSE: "false"
+          SKIP_IMAGE_PRE_COMMITS: "true"
+          SKIP: "identity"
+          COLUMNS: "250"
       - name: "Fix ownership"
         run: breeze fix-ownership
         if: always()
@@ -1660,6 +1661,7 @@ ${{ hashFiles('.pre-commit-config.yaml') }}"
       - docs
     if: needs.build-info.outputs.mergeRun == 'true'
     strategy:
+      fail-fast: false
       matrix:
         python-version: ${{ fromJson(needs.build-info.outputs.pythonVersions) }}
     env:
@@ -1687,6 +1689,7 @@ ${{ hashFiles('.pre-commit-config.yaml') }}"
         run: >
           breeze build-image
           --prepare-buildx-cache
+          --max-retries 3
           --platform linux/amd64,linux/arm64
         env:
           PYTHON_MAJOR_MINOR_VERSION: ${{ matrix.python-version }}
@@ -1720,6 +1723,7 @@ ${{ hashFiles('.pre-commit-config.yaml') }}"
           --install-packages-from-context
           --prepare-buildx-cache
           --disable-airflow-repo-cache
+          --max-retries 3
           --platform linux/amd64,linux/arm64
         env:
           PYTHON_MAJOR_MINOR_VERSION: ${{ matrix.python-version }}
