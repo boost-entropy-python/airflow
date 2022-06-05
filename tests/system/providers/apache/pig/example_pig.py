@@ -16,29 +16,35 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# Ignore missing args provided by default_args
-# type: ignore[call-arg]
+"""Example DAG demonstrating the usage of the PigOperator."""
 
-"""
-Example Airflow DAG to check if a Cassandra Table and a Records exists
-or not using `CassandraTableSensor` and `CassandraRecordSensor`.
-"""
+import os
 from datetime import datetime
 
-from airflow.models import DAG
-from airflow.providers.apache.cassandra.sensors.record import CassandraRecordSensor
-from airflow.providers.apache.cassandra.sensors.table import CassandraTableSensor
+from airflow import DAG
+from airflow.providers.apache.pig.operators.pig import PigOperator
 
-# [START howto_operator_cassandra_sensors]
+ENV_ID = os.environ.get("SYSTEM_TESTS_ENV_ID")
+DAG_ID = "example_adf_run_pipeline"
+
 with DAG(
-    dag_id='example_cassandra_operator',
+    dag_id='example_pig_operator',
     schedule_interval=None,
     start_date=datetime(2021, 1, 1),
-    default_args={'table': 'keyspace_name.table_name'},
     catchup=False,
     tags=['example'],
 ) as dag:
-    table_sensor = CassandraTableSensor(task_id="cassandra_table_sensor")
 
-    record_sensor = CassandraRecordSensor(task_id="cassandra_record_sensor", keys={"p1": "v1", "p2": "v2"})
-# [END howto_operator_cassandra_sensors]
+    # [START create_pig]
+    run_this = PigOperator(
+        task_id="run_example_pig_script",
+        pig="ls /;",
+        pig_opts="-x local",
+    )
+    # [END create_pig]
+
+
+from tests.system.utils import get_test_run  # noqa: E402
+
+# Needed to run the example DAG with pytest (see: tests/system/README.md#run_via_pytest)
+test_run = get_test_run(dag)
