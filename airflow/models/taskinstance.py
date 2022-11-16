@@ -47,6 +47,7 @@ from sqlalchemy import (
     Integer,
     PrimaryKeyConstraint,
     String,
+    Text,
     and_,
     false,
     func,
@@ -354,6 +355,7 @@ class TaskInstance(Base, LoggingMixin):
     queued_by_job_id = Column(Integer)
     pid = Column(Integer)
     executor_config = Column(ExecutorConfigType(pickler=dill))
+    notes = Column(String(1000).with_variant(Text(1000), "mysql"))
     updated_at = Column(UtcDateTime, default=timezone.utcnow, onupdate=timezone.utcnow)
 
     external_executor_id = Column(StringID())
@@ -792,6 +794,7 @@ class TaskInstance(Base, LoggingMixin):
             self.trigger_id = ti.trigger_id
             self.next_method = ti.next_method
             self.next_kwargs = ti.next_kwargs
+            self.notes = ti.notes
         else:
             self.state = None
 
@@ -2571,6 +2574,11 @@ class SimpleTaskInstance:
         return NotImplemented
 
     def as_dict(self):
+        warnings.warn(
+            "This method is deprecated. Use BaseSerialization.serialize.",
+            RemovedInAirflow3Warning,
+            stacklevel=2,
+        )
         new_dict = dict(self.__dict__)
         for key in new_dict:
             if key in ["start_date", "end_date"]:
@@ -2601,6 +2609,11 @@ class SimpleTaskInstance:
 
     @classmethod
     def from_dict(cls, obj_dict: dict) -> SimpleTaskInstance:
+        warnings.warn(
+            "This method is deprecated. Use BaseSerialization.deserialize.",
+            RemovedInAirflow3Warning,
+            stacklevel=2,
+        )
         ti_key = TaskInstanceKey(*obj_dict.pop("key"))
         start_date = None
         end_date = None
