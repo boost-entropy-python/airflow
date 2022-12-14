@@ -214,7 +214,7 @@ svn update --set-depth=infinity asf-dist/dev/airflow
 cd asf-dist/dev/airflow/providers
 
 # Remove previously released providers
-rm -rf *
+svn rm *
 
 # Move the artifacts to svn folder
 mv ${AIRFLOW_REPO_ROOT}/dist/* .
@@ -325,6 +325,7 @@ If we want to just release some providers you can release them in this way:
 ```shell script
 cd "${AIRFLOW_REPO_ROOT}"
 breeze build-docs --clean-build --for-production \
+  --package-filter apache-airflow-providers \
   --package-filter 'apache-airflow-providers-PACKAGE1' \
   --package-filter 'apache-airflow-providers-PACKAGE2' \
   ...
