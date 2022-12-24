@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -17,25 +17,21 @@
 # under the License.
 from __future__ import annotations
 
-import os
-import subprocess
+import re
 from pathlib import Path
 
-if __name__ not in ("__main__", "__mp_main__"):
-    raise SystemExit(
-        "This file is intended to be executed as an executable program. You cannot use it as a module."
-        f"To run this script, run the ./{__file__} command"
-    )
+import yaml
 
-AIRFLOW_SOURCES_PATH = Path(__file__).parents[3].resolve()
-WWW_HASH_FILE = AIRFLOW_SOURCES_PATH / ".build" / "www" / "hash.txt"
+AIRFLOW_SOURCES = Path(__file__).parents[3].resolve()
+
 
 if __name__ == "__main__":
-    www_directory = Path("airflow") / "www"
-    if WWW_HASH_FILE.exists():
-        # cleanup hash of www so that next compile-assets recompiles them
-        WWW_HASH_FILE.unlink()
-    env = os.environ.copy()
-    env["FORCE_COLOR"] = "true"
-    subprocess.check_call(["yarn", "install", "--frozen-lockfile"], cwd=str(www_directory))
-    subprocess.check_call(["yarn", "dev"], cwd=str(www_directory), env=env)
+    PRE_COMMIT_CONFIG_FILE = AIRFLOW_SOURCES / ".pre-commit-config.yaml"
+    pre_commit_content = yaml.safe_load(PRE_COMMIT_CONFIG_FILE.read_text())
+    for repo in pre_commit_content["repos"]:
+        if repo["repo"] == "https://github.com/psf/black":
+            black_version = repo["rev"]
+            pre_commit_text = PRE_COMMIT_CONFIG_FILE.read_text()
+            pre_commit_text = re.sub(r"black==[0-9\.]*", f"black=={black_version}", pre_commit_text)
+            PRE_COMMIT_CONFIG_FILE.write_text(pre_commit_text)
+            break
