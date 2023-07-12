@@ -14,20 +14,21 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-"""Executors."""
 from __future__ import annotations
 
-from airflow.utils.deprecation_tools import add_deprecated_classes
+import os
+from pathlib import Path
 
-__deprecated_classes = {
-    "celery_executor": {
-        "app": "airflow.providers.celery.executors.celery_executor_utils.app",
-        "CeleryExecutor": "airflow.providers.celery.executors.celery_executor.CeleryExecutor",
-    },
-    "celery_kubernetes_executor": {
-        "CeleryKubernetesExecutor": "airflow.providers.celery.executors."
-        "celery_kubernetes_executor.CeleryKubernetesExecutor",
-    },
-}
+import yaml
 
-add_deprecated_classes(__deprecated_classes, __name__)
+CHART_DIR = Path(__file__).resolve().parents[5] / "chart"
+CHART_YAML_PATH = os.path.join(CHART_DIR, "Chart.yaml")
+
+
+def chart_yaml() -> dict:
+    with open(CHART_YAML_PATH) as f:
+        return yaml.safe_load(f)
+
+
+def chart_version() -> str:
+    return chart_yaml()["version"]
