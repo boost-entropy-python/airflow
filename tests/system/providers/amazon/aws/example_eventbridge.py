@@ -18,40 +18,35 @@ from __future__ import annotations
 
 from datetime import datetime
 
-import pytz
+from airflow import DAG
+from airflow.providers.amazon.aws.operators.eventbridge import EventBridgePutEventsOperator
 
-from airflow.providers.amazon.aws.utils import (
-    _StringCompareEnum,
-    datetime_to_epoch,
-    datetime_to_epoch_ms,
-    datetime_to_epoch_us,
-    get_airflow_version,
-)
+DAG_ID = "example_eventbridge"
+ENTRIES = [
+    {
+        "Detail": '{"event-name": "custom-event"}',
+        "EventBusName": "custom-bus",
+        "Source": "example.myapp",
+        "DetailType": "Sample Custom Event",
+    }
+]
 
-DT = datetime(2000, 1, 1, tzinfo=pytz.UTC)
-EPOCH = 946_684_800
+with DAG(
+    dag_id=DAG_ID,
+    schedule="@once",
+    start_date=datetime(2021, 1, 1),
+    tags=["example"],
+    catchup=False,
+) as dag:
 
+    # [START howto_operator_eventbridge_put_events]
 
-class EnumTest(_StringCompareEnum):
-    FOO = "FOO"
+    put_events = EventBridgePutEventsOperator(task_id="put_events_task", entries=ENTRIES)
 
-
-def test_datetime_to_epoch():
-    assert datetime_to_epoch(DT) == EPOCH
-
-
-def test_datetime_to_epoch_ms():
-    assert datetime_to_epoch_ms(DT) == EPOCH * 1000
-
-
-def test_datetime_to_epoch_us():
-    assert datetime_to_epoch_us(DT) == EPOCH * 1_000_000
+    # [END howto_operator_eventbridge_put_events]
 
 
-def test_get_airflow_version():
-    assert len(get_airflow_version()) == 3
+from tests.system.utils import get_test_run  # noqa: E402
 
-
-def test_str_enum():
-    assert EnumTest.FOO == "FOO"
-    assert EnumTest.FOO.value == "FOO"
+# Needed to run the example DAG with pytest (see: tests/system/README.md#run_via_pytest)
+test_run = get_test_run(dag)

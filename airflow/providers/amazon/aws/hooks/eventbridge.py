@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,5 +14,14 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-[core]
-sql_alchemy_conn = mysql://
+from __future__ import annotations
+
+from airflow.providers.amazon.aws.hooks.base_aws import AwsBaseHook
+
+
+class EventBridgeHook(AwsBaseHook):
+    """Amazon EventBridge Hook."""
+
+    def __init__(self, *args, **kwargs):
+        """Creating object."""
+        super().__init__(client_type="events", *args, **kwargs)

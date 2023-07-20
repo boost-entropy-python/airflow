@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,5 +14,15 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-[core]
-sql_alchemy_conn = mysql://
+from __future__ import annotations
+
+from moto import mock_events
+
+from airflow.providers.amazon.aws.hooks.eventbridge import EventBridgeHook
+
+
+@mock_events
+class TestEventBridgeHook:
+    def test_conn_returns_a_boto3_connection(self):
+        hook = EventBridgeHook(aws_conn_id="aws_default")
+        assert hook.conn is not None
