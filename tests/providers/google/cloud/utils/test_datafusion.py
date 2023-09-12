@@ -16,25 +16,22 @@
 # under the License.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import pytest
 
-from deprecated import deprecated
-
-from airflow.auth.managers.fab.security_manager.override import FabAirflowSecurityManagerOverride
-
-if TYPE_CHECKING:
-    pass
+from airflow.providers.google.cloud.utils.datafusion import DataFusionPipelineType
 
 
-@deprecated(
-    reason="If you want to override the security manager, you should inherit from "
-    "`airflow.auth.managers.fab.security_manager.override.FabAirflowSecurityManagerOverride` "
-    "instead"
-)
-class AirflowSecurityManager(FabAirflowSecurityManagerOverride):
-    """Placeholder, just here to avoid breaking the code of users who inherit from this.
+class TestDataFusionPipelineType:
+    @pytest.mark.parametrize(
+        "str_value, expected_item",
+        [
+            ("batch", DataFusionPipelineType.BATCH),
+            ("stream", DataFusionPipelineType.STREAM),
+        ],
+    )
+    def test_from_str(self, str_value, expected_item):
+        assert DataFusionPipelineType.from_str(str_value) == expected_item
 
-    Do not use if writing new code.
-    """
-
-    ...
+    def test_from_str_error(self):
+        with pytest.raises(ValueError):
+            DataFusionPipelineType.from_str("non-existing value")
