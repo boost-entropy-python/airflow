@@ -395,7 +395,7 @@ jobs:
       ${{needs.build-info.outputs.build-job-description}} PROD images
       ${{needs.build-info.outputs.all-python-versions-list-as-string}}
     runs-on: ${{fromJSON(needs.build-info.outputs.runs-on)}}
-    needs: [build-info, build-ci-images, generate-constraints]
+    needs: [build-info, build-ci-images]
     env:
       DEFAULT_BRANCH: ${{ needs.build-info.outputs.default-branch }}
       DEFAULT_CONSTRAINTS_BRANCH: ${{ needs.build-info.outputs.default-constraints-branch }}
@@ -445,7 +445,7 @@ jobs:
       ${{needs.build-info.outputs.build-job-description}} Bullseye PROD images
       ${{needs.build-info.outputs.all-python-versions-list-as-string}}
     runs-on: ${{fromJSON(needs.build-info.outputs.runs-on)}}
-    needs: [build-info, build-ci-images, generate-constraints]
+    needs: [build-info, build-ci-images]
     if: needs.build-info.outputs.canary-run == 'true'
     env:
       DEFAULT_BRANCH: ${{ needs.build-info.outputs.default-branch }}
@@ -1930,8 +1930,8 @@ jobs:
           DEBUG_RESOURCES: ${{needs.build-info.outputs.debug-resources}}
           COMMIT_SHA: ${{ github.sha }}
         if: matrix.platform == 'linux/amd64'
-      - name: "Move dist packages to docker-context files"
-        run: mv -v ./dist/*.whl ./docker-context-files
+      - name: "Copy dist packages to docker-context files"
+        run: cp -v --no-preserve=mode,ownership ./dist/*.whl ./docker-context-files
       - name: "Push PROD cache ${{ matrix.python-version }} ${{ matrix.platform }}"
         run: >
           breeze prod-image build
@@ -1970,7 +1970,6 @@ jobs:
     runs-on: ${{fromJSON(needs.build-info.outputs.runs-on)}}
     needs:
       - build-info
-      - generate-constraints
       - docs
       - static-checks
       - tests-sqlite
