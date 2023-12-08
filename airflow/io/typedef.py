@@ -14,16 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
----
-services:
-  airflow:
-    volumes:
-      # Removes airflow sources from container
-      - type: bind
-        source: ./empty
-        target: /opt/airflow/airflow:cached
-      # However we keep in_container scripts in order to be able to debug easily the scripts that
-      # are run with --mount-sources removed flag - such as installing airflow and providers
-      - type: bind
-        source: ../../../scripts/in_container
-        target: /opt/airflow/scripts/in_container:cached
+from __future__ import annotations
+
+from typing import Dict
+
+Properties = Dict[str, str]
