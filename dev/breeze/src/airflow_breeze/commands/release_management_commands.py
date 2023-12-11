@@ -610,9 +610,10 @@ def run_generate_constraints(
     result = execute_command_in_shell(
         shell_params,
         project_name=f"constraints-{shell_params.python.replace('.', '-')}",
-        command="/opt/airflow/scripts/in_container/run_generate_constraints.sh",
+        command="/opt/airflow/scripts/in_container/run_generate_constraints.py",
+        output=output,
     )
-    fix_ownership_using_docker()
+
     return (
         result.returncode,
         f"Constraints {shell_params.airflow_constraints_mode}:{shell_params.python}",
@@ -622,6 +623,15 @@ def run_generate_constraints(
 CONSTRAINT_PROGRESS_MATCHER = (
     r"Found|Uninstalling|uninstalled|Collecting|Downloading|eta|Running|Installing|built|Attempting"
 )
+
+
+def list_generated_constraints(output: Output | None):
+    get_console(output=output).print("\n[info]List of generated files in './files' folder:[/]\n")
+    found_files = Path("./files").rglob("*")
+    for file in sorted(found_files):
+        if file.is_file():
+            get_console(output=output).print(file.as_posix())
+    get_console(output=output).print()
 
 
 def run_generate_constraints_in_parallel(
@@ -747,6 +757,7 @@ def generate_constraints(
             shell_params_list=shell_params_list,
             skip_cleanup=skip_cleanup,
         )
+        fix_ownership_using_docker()
     else:
         shell_params = ShellParams(
             airflow_constraints_mode=airflow_constraints_mode,
@@ -759,9 +770,11 @@ def generate_constraints(
             shell_params=shell_params,
             output=None,
         )
+        fix_ownership_using_docker()
         if return_code != 0:
             get_console().print(f"[error]There was an error when generating constraints: {info}[/]")
             sys.exit(return_code)
+    list_generated_constraints(output=None)
 
 
 SDIST_FILENAME_PREFIX = "apache-airflow-providers-"
