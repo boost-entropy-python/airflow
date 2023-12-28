@@ -29,7 +29,7 @@
 - [Prepare Regular Provider packages (RC)](#prepare-regular-provider-packages-rc)
   - [Increasing version number](#increasing-version-number)
   - [Generate release notes](#generate-release-notes)
-  - [Apply template updates](#apply-template-updates)
+  - [(Optional) Apply template updates](#optional-apply-template-updates)
   - [Open PR with suggested version releases](#open-pr-with-suggested-version-releases)
   - [Build provider packages for SVN apache upload](#build-provider-packages-for-svn-apache-upload)
   - [Build and sign the source and convenience packages](#build-and-sign-the-source-and-convenience-packages)
@@ -262,9 +262,10 @@ breeze release-management prepare-provider-documentation --include-removed-provi
  --base-branch provider-cncf-kubernetes/v4-4 cncf.kubernetes
 ```
 
-## Apply template updates
+## (Optional) Apply template updates
 
-(This step can also be executed independently when needed)
+This step should only be executed if we want to change template files for the providers - i.e. change
+security information, commit/index/README content that is automatically generated.
 
 Regenerate the documentation templates by running the command with
 `--reapply-templates` flag to the command above. This refreshes the content of:
@@ -401,31 +402,13 @@ increased until the tag is not found.
 twine check ${AIRFLOW_REPO_ROOT}/dist/*
 ```
 
-* Upload the package to PyPi's test environment:
-
-```shell script
-twine upload -r pypitest ${AIRFLOW_REPO_ROOT}/dist/*
-```
-
-If you see
-> WARNING  Error during upload. Retry with the --verbose option for more details.
-ERROR   HTTPError: 403 Forbidden from https://test.pypi.org/legacy/
-     The user [user_name] isn't allowed to upload to project [provider_name]
-
-It means that you don't have permission to upload providers.
-Please ask one of the Admins to grant you permissions on the packages you wish to release.
-
-
-* Verify that the test packages look good by downloading it and installing them into a virtual environment.
-Twine prints the package links as output - separately for each package.
-
-* Upload the package to PyPi's production environment:
+* Upload the package to PyPi:
 
 ```shell script
 twine upload -r pypi ${AIRFLOW_REPO_ROOT}/dist/*
 ```
 
-* Again, confirm that the packages are available under the links printed.
+* Confirm that the packages are available under the links printed and look good.
 
 
 ## Add tags in git
@@ -1114,22 +1097,15 @@ This is expected, the RC tag is most likely behind the main branch.
 twine check ${AIRFLOW_REPO_ROOT}/dist/*.whl ${AIRFLOW_REPO_ROOT}/dist/*.tar.gz
 ```
 
-* Upload the package to PyPi's test environment:
-
-```shell script
-twine upload -r pypitest ${AIRFLOW_REPO_ROOT}/dist/*.whl ${AIRFLOW_REPO_ROOT}/dist/*.tar.gz
-```
-
-* Verify that the test packages look good by downloading it and installing them into a virtual environment.
-  Twine prints the package links as output - separately for each package.
-
-* Upload the package to PyPi's production environment:
+* Upload the package to PyPi:
 
 ```shell script
 twine upload -r pypi ${AIRFLOW_REPO_ROOT}/dist/*.whl ${AIRFLOW_REPO_ROOT}/dist/*.tar.gz
 ```
 
-Copy links to updated packages, sort it aphabeticly and save it on the side. You will need it for the announcement message.
+* Verify that the packages are available under the links printed.
+
+Copy links to updated packages, sort it alphabetically and save it on the side. You will need it for the announcement message.
 
 * Again, confirm that the packages are available under the links printed.
 
