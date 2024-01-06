@@ -24,9 +24,23 @@ github:
     - airflow
     - apache
     - apache-airflow
+    - automation
+    - dag
+    - data-engineering
+    - data-integration
+    - data-orchestrator
+    - data-pipelines
+    - data-science
+    - elt
+    - etl
+    - machine-learning
+    - mlops
+    - orchestration
     - python
     - scheduler
     - workflow
+    - workflow-engine
+    - workflow-orchestration
   features:
     # Enable issues management
     issues: true
