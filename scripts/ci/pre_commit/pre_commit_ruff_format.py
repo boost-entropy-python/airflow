@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,11 +15,12 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-set -euxo pipefail
+from __future__ import annotations
 
-cd "$( dirname "${BASH_SOURCE[0]}" )/../../"
+import os
+import subprocess
 
-python -m pip install --upgrade pip==23.3.2
-python -m pip install "pipx>=1.4.1"
-python -m pipx install --editable ./dev/breeze/ --force
-echo '/home/runner/.local/bin' >> "${GITHUB_PATH}"
+ruff_format_cmd = "ruff format --force-exclude 2>&1 | grep -v '`ISC001`. To avoid unexpected behavior'"
+envcopy = os.environ.copy()
+envcopy["CLICOLOR_FORCE"] = "1"
+subprocess.run(ruff_format_cmd, shell=True, check=True, env=envcopy)
