@@ -86,7 +86,7 @@ if platform.system() == "Darwin":
 # Ignore files that are really test dags to be ignored by pytest
 collect_ignore = [
     "tests/dags/subdir1/test_ignore_this.py",
-    "tests/dags/test_invalid_dup_task.pyy",
+    "tests/dags/test_invalid_dup_task.py",
     "tests/dags_corrupted/test_impersonation_custom.py",
     "tests/test_utils/perf/dags/elastic_dag.py",
 ]
@@ -1243,7 +1243,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config=None):
     if captured_warnings:
         print("\n ======================== Warning summary =============================\n")
         print(f"   The tests generated {sum(captured_warnings_count.values())} warnings.")
-        print(f"   After removing duplicates, {len(captured_warnings.values())}  of them remained.")
+        print(f"   After removing duplicates, {len(captured_warnings.values())} of them remained.")
         print(f"   They are stored in {warning_output_path} file.")
         print("\n ======================================================================\n")
         warnings_as_json = []
