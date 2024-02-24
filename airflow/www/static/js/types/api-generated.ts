@@ -1444,6 +1444,12 @@ export interface components {
       executor_config?: string;
       sla_miss?: components["schemas"]["SLAMiss"];
       /**
+       * @description Rendered name of an expanded task instance, if the task is mapped.
+       *
+       * *New in version 2.9.0*
+       */
+      rendered_map_index?: string | null;
+      /**
        * @description JSON object describing rendered fields.
        *
        * *New in version 2.3.0*
@@ -3510,6 +3516,16 @@ export interface operations {
         before?: components["parameters"]["Before"];
         /** Timestamp to select event logs occurring after. */
         after?: components["parameters"]["After"];
+        /**
+         * One or more event names separated by commas. If set, only return event logs with events matching this pattern.
+         * *New in version 2.9.0*
+         */
+        included_events?: string;
+        /**
+         * One or more event names separated by commas. If set, only return event logs with events that do not match this pattern.
+         * *New in version 2.9.0*
+         */
+        excluded_events?: string;
       };
     };
     responses: {
