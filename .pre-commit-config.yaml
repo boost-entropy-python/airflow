@@ -193,6 +193,16 @@ repos:
         files: ^.pre-commit-config.yaml$|^scripts/ci/pre_commit/pre_commit_update_build_dependencies.py$
         pass_filenames: false
         require_serial: true
+      - id: update-installers
+        name: Update installers to latest (manual)
+        entry: ./scripts/ci/pre_commit/pre_commit_update_installers.py
+        stages: ['manual']
+        language: python
+        language_version: python38
+        files: ^.pre-commit-config.yaml$|^scripts/ci/pre_commit/pre_commit_update_installers.py$
+        pass_filenames: false
+        require_serial: true
+        additional_dependencies: ['pyyaml', 'rich>=12.4.4', 'requests']
       - id: update-chart-dependencies
         name: Update chart dependencies to latest (manual)
         entry: ./scripts/ci/pre_commit/pre_commit_update_chart_dependencies.py
@@ -327,7 +337,6 @@ repos:
               ^.*__init__\.py$|
               ^airflow\/providers\/amazon\/aws\/transfers\/redshift_to_s3\.py$|
               ^airflow\/providers\/amazon\/aws\/operators\/emr\.py$|
-              ^airflow\/providers\/amazon\/aws\/operators\/eks\.py$
           )$
       - id: ruff
         name: Run 'ruff' for extremely fast Python linting
@@ -754,7 +763,7 @@ repos:
         name: Sort alphabetically and uniquify installed_providers.txt
         entry: ./scripts/ci/pre_commit/pre_commit_sort_installed_providers.py
         language: python
-        files: ^\.pre-commit-config\.yaml$|^dev/.*_installed_providers\.txt$
+        files: ^\.pre-commit-config\.yaml$|^.*_installed_providers\.txt$
         pass_filenames: false
         require_serial: true
       - id: update-spelling-wordlist-to-be-sorted
