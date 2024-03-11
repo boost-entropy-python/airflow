@@ -1457,7 +1457,6 @@ combine-as-imports = true
 "airflow/utils/trigger_rule.py" = ["D105"]
 "airflow/utils/types.py" = ["D105"]
 "airflow/utils/weight_rule.py" = ["D105"]
-"airflow/providers/apache/hive/hooks/hive.py" = ["D105"]
 "airflow/providers/cncf/kubernetes/secret.py" = ["D105"]
 "airflow/providers/cncf/kubernetes/utils/delete_from.py" = ["D105"]
 "airflow/providers/databricks/hooks/databricks.py" = ["D105"]
@@ -1470,7 +1469,6 @@ combine-as-imports = true
 "airflow/providers/microsoft/psrp/hooks/psrp.py" = ["D105"]
 "airflow/providers/samba/hooks/samba.py" = ["D105"]
 "airflow/providers/smtp/hooks/smtp.py" = ["D105"]
-"airflow/providers/ssh/hooks/ssh.py" = ["D105"]
 "airflow/providers/tableau/hooks/tableau.py" = ["D105"]
 
 [tool.ruff.lint.flake8-tidy-imports]
