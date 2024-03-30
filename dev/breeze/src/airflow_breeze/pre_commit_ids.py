@@ -76,6 +76,8 @@ PRE_COMMIT_LIST = [
     "check-start-date-not-used-in-defaults",
     "check-system-tests-present",
     "check-system-tests-tocs",
+    "check-template-context-variable-in-sync",
+    "check-tests-in-the-right-folders",
     "check-tests-unittest-testcase",
     "check-urlparse-usage-in-code",
     "check-usage-of-re2-over-re",

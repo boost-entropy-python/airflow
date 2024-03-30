@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,26 +14,3 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from sqlalchemy.orm import Session
-
-
-class BlankSentry:
-    """Blank class for Sentry."""
-
-    def add_tagging(self, task_instance):
-        """Blank function for tagging."""
-
-    def add_breadcrumbs(self, task_instance, session: Session | None = None):
-        """Blank function for breadcrumbs."""
-
-    def enrich_errors(self, run):
-        """Blank function for formatting a TaskInstance._run_raw_task."""
-        return run
-
-    def flush(self):
-        """Blank function for flushing errors."""
