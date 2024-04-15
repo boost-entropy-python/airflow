@@ -271,6 +271,9 @@ extend-select = [
     "PT", # flake8-pytest-style rules
     "TID25", # flake8-tidy-imports rules
     # Per rule enables
+    "RUF006", # Checks for asyncio dangling task
+    "RUF015", # Checks for unnecessary iterable allocation for first element
+    "RUF019", # Checks for unnecessary key check
     "RUF100", # Unused noqa (auto-fixable)
     # We ignore more pydocstyle than we enable, so be more selective at what we enable
     "D101",
@@ -288,12 +291,11 @@ extend-select = [
     "S101", # Checks use `assert` outside the test cases, test cases should be added into the exclusions
     "B004", # Checks for use of hasattr(x, "__call__") and replaces it with callable(x)
     "B006", # Checks for uses of mutable objects as function argument defaults.
+    "B007", # Checks for unused variables in the loop
     "B017", # Checks for pytest.raises context managers that catch Exception or BaseException.
     "B019", # Use of functools.lru_cache or functools.cache on methods can lead to memory leaks
     "B028", # No explicit stacklevel keyword argument found
     "TRY002", # Prohibit use of `raise Exception`, use specific exceptions instead.
-    "RUF006", # Checks for asyncio dangling task
-    "RUF015", # Checks for unnecessary iterable allocation for first element
 ]
 ignore = [
     "D203",
