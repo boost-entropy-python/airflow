@@ -37,6 +37,7 @@ from airflow.exceptions import AirflowProviderDeprecationWarning  # TODO: move t
 from airflow.models import DAG, BaseOperator, MappedOperator
 from airflow.providers.openlineage import conf
 from airflow.providers.openlineage.plugins.facets import (
+    AirflowDagRunFacet,
     AirflowJobFacet,
     AirflowMappedTaskRunFacet,
     AirflowRunFacet,
@@ -55,6 +56,8 @@ from airflow.utils.log.secrets_masker import Redactable, Redacted, SecretsMasker
 from airflow.utils.module_loading import import_string
 
 if TYPE_CHECKING:
+    from openlineage.client.run import Dataset as OpenLineageDataset
+
     from airflow.models import DagRun, TaskInstance
 
 
@@ -341,6 +344,17 @@ class TaskGroupInfo(InfoJsonEncodable):
         "upstream_group_ids",
         "upstream_task_ids",
     ]
+
+
+def get_airflow_dag_run_facet(dag_run: DagRun) -> dict[str, BaseFacet]:
+    if not dag_run.dag:
+        return {}
+    return {
+        "airflowDagRun": AirflowDagRunFacet(
+            dag=DagInfo(dag_run.dag),
+            dagRun=DagRunInfo(dag_run),
+        )
+    }
 
 
 def get_airflow_run_facet(
@@ -635,3 +649,31 @@ def should_use_external_connection(hook) -> bool:
     if not _IS_AIRFLOW_2_10_OR_HIGHER:
         return hook.__class__.__name__ not in ["SnowflakeHook", "SnowflakeSqlApiHook", "RedshiftSQLHook"]
     return True
+
+
+def translate_airflow_dataset(dataset: Dataset, lineage_context) -> OpenLineageDataset | None:
+    """
+    Convert a Dataset with an AIP-60 compliant URI to an OpenLineageDataset.
+
+    This function returns None if no URI normalizer is defined, no dataset converter is found or
+    some core Airflow changes are missing and ImportError is raised.
+    """
+    try:
+        from airflow.datasets import _get_normalized_scheme
+        from airflow.providers_manager import ProvidersManager
+
+        ol_converters = ProvidersManager().dataset_to_openlineage_converters
+        normalized_uri = dataset.normalized_uri
+    except (ImportError, AttributeError):
+        return None
+
+    if normalized_uri is None:
+        return None
+
+    if not (normalized_scheme := _get_normalized_scheme(normalized_uri)):
+        return None
+
+    if (airflow_to_ol_converter := ol_converters.get(normalized_scheme)) is None:
+        return None
+
+    return airflow_to_ol_converter(Dataset(uri=normalized_uri, extra=dataset.extra), lineage_context)
