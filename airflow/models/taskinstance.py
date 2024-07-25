@@ -94,7 +94,6 @@ from airflow.models.base import Base, StringID, TaskInstanceDependencies, _senti
 from airflow.models.dagbag import DagBag
 from airflow.models.dataset import DatasetAliasModel, DatasetModel
 from airflow.models.log import Log
-from airflow.models.mappedoperator import MappedOperator
 from airflow.models.param import process_params
 from airflow.models.renderedtifields import get_serialized_template_fields
 from airflow.models.taskfail import TaskFail
@@ -139,7 +138,7 @@ from airflow.utils.state import DagRunState, JobState, State, TaskInstanceState
 from airflow.utils.task_group import MappedTaskGroup
 from airflow.utils.task_instance_session import set_current_task_instance_session
 from airflow.utils.timeout import timeout
-from airflow.utils.types import ATTRIBUTE_REMOVED
+from airflow.utils.types import AttributeRemoved
 from airflow.utils.xcom import XCOM_RETURN_KEY
 
 TR = TaskReschedule
@@ -699,6 +698,8 @@ def _execute_task(task_instance: TaskInstance | TaskInstancePydantic, context: C
 
     :meta private:
     """
+    from airflow.models.mappedoperator import MappedOperator
+
     task_to_execute = task_instance.task
 
     if TYPE_CHECKING:
@@ -935,7 +936,7 @@ def _get_template_context(
         assert task
         assert task.dag
 
-    if task.dag is ATTRIBUTE_REMOVED:
+    if task.dag.__class__ is AttributeRemoved:
         task.dag = dag  # required after deserialization
 
     dag_run = task_instance.get_dagrun(session)
@@ -1288,7 +1289,9 @@ def _record_task_map_for_downstreams(
 
     :meta private:
     """
-    if task.dag is ATTRIBUTE_REMOVED:
+    from airflow.models.mappedoperator import MappedOperator
+
+    if task.dag.__class__ is AttributeRemoved:
         task.dag = dag  # required after deserialization
 
     if next(task.iter_mapped_dependants(), None) is None:  # No mapped dependants, no need to validate.
@@ -2672,7 +2675,7 @@ class TaskInstance(Base, LoggingMixin):
         """Ensure that task has a dag object associated, might have been removed by serialization."""
         if TYPE_CHECKING:
             assert task_instance.task
-        if task_instance.task.dag is None or task_instance.task.dag is ATTRIBUTE_REMOVED:
+        if task_instance.task.dag is None or task_instance.task.dag.__class__ is AttributeRemoved:
             task_instance.task.dag = DagBag(read_dags_from_db=True).get_dag(
                 dag_id=task_instance.dag_id, session=session
             )
@@ -3454,6 +3457,8 @@ class TaskInstance(Base, LoggingMixin):
         the unmapped, fully rendered BaseOperator. The original ``self.task``
         before replacement is returned.
         """
+        from airflow.models.mappedoperator import MappedOperator
+
         if not context:
             context = self.get_template_context()
         original_task = self.task
@@ -3465,7 +3470,7 @@ class TaskInstance(Base, LoggingMixin):
             assert self.task
             assert ti.task
 
-        if ti.task.dag is ATTRIBUTE_REMOVED:
+        if ti.task.dag.__class__ is AttributeRemoved:
             ti.task.dag = self.task.dag
 
         # If self.task is mapped, this call replaces self.task to point to the
@@ -3989,6 +3994,8 @@ def _find_common_ancestor_mapped_group(node1: Operator, node2: Operator) -> Mapp
 
 def _is_further_mapped_inside(operator: Operator, container: TaskGroup) -> bool:
     """Whether given operator is *further* mapped inside a task group."""
+    from airflow.models.mappedoperator import MappedOperator
+
     if isinstance(operator, MappedOperator):
         return True
     task_group = operator.task_group
