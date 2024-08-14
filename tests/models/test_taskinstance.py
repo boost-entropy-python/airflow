@@ -420,7 +420,7 @@ class TestTaskInstance:
         test that try to create a task with pool_slots less than 1
         """
 
-        dag = DAG(dag_id="test_run_pooling_task")
+        dag = DAG(dag_id="test_run_pooling_task", schedule=None)
         with pytest.raises(ValueError, match="pool slots .* cannot be less than 1"):
             EmptyOperator(
                 task_id="test_run_pooling_task_op",
@@ -1539,8 +1539,9 @@ class TestTaskInstance:
         monkeypatch.setattr(_UpstreamTIStates, "calculate", lambda *_: upstream_states)
         ti = dr.get_task_instance("do_something_else", session=session)
         ti.map_index = 0
+        base_task = ti.task
         for map_index in range(1, 5):
-            ti = TaskInstance(dr.task_instances[-1].task, run_id=dr.run_id, map_index=map_index)
+            ti = TaskInstance(base_task, run_id=dr.run_id, map_index=map_index)
             session.add(ti)
             ti.dag_run = dr
         session.flush()
