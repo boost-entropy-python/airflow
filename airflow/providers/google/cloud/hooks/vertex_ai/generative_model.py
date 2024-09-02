@@ -23,16 +23,17 @@ import time
 from typing import TYPE_CHECKING, Sequence
 
 import vertexai
-from deprecated import deprecated
 from vertexai.generative_models import GenerativeModel, Part
 from vertexai.language_models import TextEmbeddingModel, TextGenerationModel
 from vertexai.preview.tuning import sft
 
 from airflow.exceptions import AirflowProviderDeprecationWarning
+from airflow.providers.google.common.deprecated import deprecated
 from airflow.providers.google.common.hooks.base_google import PROVIDE_PROJECT_ID, GoogleBaseHook
 
 if TYPE_CHECKING:
-    from google.cloud.aiplatform_v1 import types
+    from google.cloud.aiplatform_v1 import types as types_v1
+    from google.cloud.aiplatform_v1beta1 import types as types_v1beta1
 
 
 class GenerativeModelHook(GoogleBaseHook):
@@ -67,9 +68,10 @@ class GenerativeModelHook(GoogleBaseHook):
         return model
 
     @deprecated(
-        reason=(
-            "The `get_generative_model_part` method is deprecated and will be removed after 01.01.2025, please include `Part` objects in `contents` parameter of `airflow.providers.google.cloud.hooks.generative_model.GenerativeModelHook.generative_model_generate_content`"
-        ),
+        planned_removal_date="January 01, 2025",
+        use_instead="Part objects included in contents parameter of "
+        "airflow.providers.google.cloud.hooks.generative_model."
+        "GenerativeModelHook.generative_model_generate_content",
         category=AirflowProviderDeprecationWarning,
     )
     def get_generative_model_part(self, content_gcs_path: str, content_mime_type: str | None = None) -> Part:
@@ -78,9 +80,9 @@ class GenerativeModelHook(GoogleBaseHook):
         return part
 
     @deprecated(
-        reason=(
-            "The `prompt_language_model` method is deprecated and will be removed after 01.01.2025, please use `airflow.providers.google.cloud.hooks.generative_model.GenerativeModelHook.text_generation_model_predict` method."
-        ),
+        planned_removal_date="January 01, 2025",
+        use_instead="airflow.providers.google.cloud.hooks.generative_model."
+        "GenerativeModelHook.text_generation_model_predict",
         category=AirflowProviderDeprecationWarning,
     )
     @GoogleBaseHook.fallback_to_default_project_id
@@ -132,9 +134,9 @@ class GenerativeModelHook(GoogleBaseHook):
         return response.text
 
     @deprecated(
-        reason=(
-            "The `generate_text_embeddings` method is deprecated and will be removed after 01.01.2025, please use `airflow.providers.google.cloud.hooks.generative_model.GenerativeModelHook.text_embedding_model_get_embeddings` method."
-        ),
+        planned_removal_date="January 01, 2025",
+        use_instead="airflow.providers.google.cloud.hooks.generative_model."
+        "GenerativeModelHook.text_embedding_model_get_embeddings",
         category=AirflowProviderDeprecationWarning,
     )
     @GoogleBaseHook.fallback_to_default_project_id
@@ -162,9 +164,9 @@ class GenerativeModelHook(GoogleBaseHook):
         return response.values
 
     @deprecated(
-        reason=(
-            "The `prompt_multimodal_model` method is deprecated and will be removed after 01.01.2025, please use `airflow.providers.google.cloud.hooks.generative_model.GenerativeModelHook.generative_model_generate_content` method."
-        ),
+        planned_removal_date="January 01, 2025",
+        use_instead="airflow.providers.google.cloud.hooks.generative_model."
+        "GenerativeModelHook.generative_model_generate_content",
         category=AirflowProviderDeprecationWarning,
     )
     @GoogleBaseHook.fallback_to_default_project_id
@@ -201,9 +203,9 @@ class GenerativeModelHook(GoogleBaseHook):
         return response.text
 
     @deprecated(
-        reason=(
-            "The `prompt_multimodal_model_with_media` method is deprecated and will be removed after 01.01.2025, please use `airflow.providers.google.cloud.hooks.generative_model.GenerativeModelHook.generative_model_generate_content` method."
-        ),
+        planned_removal_date="January 01, 2025",
+        use_instead="airflow.providers.google.cloud.hooks.generative_model."
+        "GenerativeModelHook.generative_model_generate_content",
         category=AirflowProviderDeprecationWarning,
     )
     @GoogleBaseHook.fallback_to_default_project_id
@@ -366,7 +368,7 @@ class GenerativeModelHook(GoogleBaseHook):
         adapter_size: int | None = None,
         learning_rate_multiplier: float | None = None,
         project_id: str = PROVIDE_PROJECT_ID,
-    ) -> types.TuningJob:
+    ) -> types_v1.TuningJob:
         """
         Use the Supervised Fine Tuning API to create a tuning job.
 
@@ -405,3 +407,32 @@ class GenerativeModelHook(GoogleBaseHook):
             sft_tuning_job.refresh()
 
         return sft_tuning_job
+
+    @GoogleBaseHook.fallback_to_default_project_id
+    def count_tokens(
+        self,
+        contents: list,
+        location: str,
+        pretrained_model: str = "gemini-pro",
+        project_id: str = PROVIDE_PROJECT_ID,
+    ) -> types_v1beta1.CountTokensResponse:
+        """
+        Use the Vertex AI Count Tokens API to calculate the number of input tokens before sending a request to the Gemini API.
+
+        :param contents: Required. The multi-part content of a message that a user or a program
+            gives to the generative model, in order to elicit a specific response.
+        :param location: Required. The ID of the Google Cloud location that the service belongs to.
+        :param pretrained_model: By default uses the pre-trained model `gemini-pro`,
+            supporting prompts with text-only input, including natural language
+            tasks, multi-turn text and code chat, and code generation. It can
+            output text and code.
+        :param project_id: Required. The ID of the Google Cloud project that the service belongs to.
+        """
+        vertexai.init(project=project_id, location=location, credentials=self.get_credentials())
+
+        model = self.get_generative_model(pretrained_model)
+        response = model.count_tokens(
+            contents=contents,
+        )
+
+        return response
