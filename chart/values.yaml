@@ -105,7 +105,7 @@ images:
     pullPolicy: IfNotPresent
   statsd:
     repository: quay.io/prometheus/statsd-exporter
-    tag: v0.27.1
+    tag: v0.27.2-pr579
     pullPolicy: IfNotPresent
   redis:
     repository: redis
@@ -1389,6 +1389,29 @@ webserver:
 
   # Grace period for webserver to finish after SIGTERM is sent from kubernetes
   terminationGracePeriodSeconds: 30
+
+  # Allow HPA
+  hpa:
+    enabled: false
+
+    # Minimum number of webservers created by HPA
+    minReplicaCount: 1
+
+    # Maximum number of webservers created by HPA
+    maxReplicaCount: 5
+
+    # Specifications for which to use to calculate the desired replica count
+    metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 80
+
+    # Scaling behavior of the target in both Up and Down directions
+    behavior: {}
+
 
   # Create ServiceAccount
   serviceAccount:
