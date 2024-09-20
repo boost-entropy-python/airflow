@@ -17,34 +17,29 @@
 # under the License.
 
 """
-Adding max_consecutive_failed_dag_runs column to dag_model table.
+placeholder migration.
 
-Revision ID: 8e1c784a4fc7
-Revises: ab34f260b71c
-Create Date: 2024-01-18 15:02:24.587206
+Revision ID: 6709f7a774b9
+Revises:
+Create Date: 2024-09-03 17:06:38.040510
 
+Note: This is a placeholder migration used to stamp the migration
+when we create the migration from the ORM. Otherwise, it will run
+without stamping the migration, leading to subsequent changes to
+the tables not being migrated.
 """
 
 from __future__ import annotations
 
-import sqlalchemy as sa
-from alembic import op
-
 # revision identifiers, used by Alembic.
-revision = "8e1c784a4fc7"
-down_revision = "ab34f260b71c"
+revision = "6709f7a774b9"
+down_revision = None
 branch_labels = None
 depends_on = None
-airflow_version = "2.9.0"
+fab_version = "1.3.0"
 
 
-def upgrade():
-    """Apply Adding max_consecutive_failed_dag_runs column to dag_model table."""
-    with op.batch_alter_table("dag", schema=None) as batch_op:
-        batch_op.add_column(sa.Column("max_consecutive_failed_dag_runs", sa.Integer()))
+def upgrade() -> None: ...
 
 
-def downgrade():
-    """Unapply Adding max_consecutive_failed_dag_runs column to dag_model table."""
-    with op.batch_alter_table("dag", schema=None) as batch_op:
-        batch_op.drop_column("max_consecutive_failed_dag_runs")
+def downgrade() -> None: ...
