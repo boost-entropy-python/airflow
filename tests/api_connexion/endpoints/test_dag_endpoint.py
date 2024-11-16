@@ -185,12 +185,10 @@ class TestGetDag(TestDagEndpoint):
             "next_dagrun_create_after": None,
             "last_expired": None,
             "max_active_tasks": 16,
-            "last_pickled": None,
             "default_view": None,
             "last_parsed_time": None,
             "timetable_description": None,
             "has_import_errors": False,
-            "pickle_id": None,
         } == response.json
 
     @conf_vars({("webserver", "secret_key"): "mysecret"})
@@ -225,12 +223,10 @@ class TestGetDag(TestDagEndpoint):
             "next_dagrun_create_after": None,
             "last_expired": None,
             "max_active_tasks": 16,
-            "last_pickled": None,
             "default_view": None,
             "last_parsed_time": None,
             "timetable_description": None,
             "has_import_errors": False,
-            "pickle_id": None,
         } == response.json
 
     def test_should_respond_404(self):
@@ -313,7 +309,6 @@ class TestGetDagDetails(TestDagEndpoint):
             "last_expired": None,
             "last_parsed": last_parsed,
             "last_parsed_time": None,
-            "last_pickled": None,
             "max_active_runs": 16,
             "max_active_tasks": 16,
             "max_consecutive_failed_dag_runs": 0,
@@ -331,7 +326,6 @@ class TestGetDagDetails(TestDagEndpoint):
                     "value": 1,
                 }
             },
-            "pickle_id": None,
             "render_template_as_native_obj": False,
             "timetable_summary": "2 2 * * *",
             "start_date": "2020-06-15T00:00:00+00:00",
@@ -375,7 +369,6 @@ class TestGetDagDetails(TestDagEndpoint):
             "last_expired": None,
             "last_parsed": last_parsed,
             "last_parsed_time": None,
-            "last_pickled": None,
             "max_active_runs": 16,
             "max_consecutive_failed_dag_runs": 0,
             "max_active_tasks": 16,
@@ -393,7 +386,6 @@ class TestGetDagDetails(TestDagEndpoint):
                     "value": 1,
                 }
             },
-            "pickle_id": None,
             "render_template_as_native_obj": False,
             "timetable_summary": "2 2 * * *",
             "start_date": "2020-06-15T00:00:00+00:00",
@@ -432,7 +424,6 @@ class TestGetDagDetails(TestDagEndpoint):
             "last_expired": None,
             "last_parsed": last_parsed,
             "last_parsed_time": None,
-            "last_pickled": None,
             "max_active_runs": 16,
             "max_consecutive_failed_dag_runs": 0,
             "max_active_tasks": 16,
@@ -443,7 +434,6 @@ class TestGetDagDetails(TestDagEndpoint):
             "orientation": "LR",
             "owners": [],
             "params": {},
-            "pickle_id": None,
             "render_template_as_native_obj": False,
             "timetable_summary": "2 2 * * *",
             "start_date": "2020-06-15T00:00:00+00:00",
@@ -482,7 +472,6 @@ class TestGetDagDetails(TestDagEndpoint):
             "last_expired": None,
             "last_parsed": last_parsed,
             "last_parsed_time": None,
-            "last_pickled": None,
             "max_active_runs": 16,
             "max_consecutive_failed_dag_runs": 0,
             "max_active_tasks": 16,
@@ -493,7 +482,6 @@ class TestGetDagDetails(TestDagEndpoint):
             "orientation": "LR",
             "owners": [],
             "params": {},
-            "pickle_id": None,
             "render_template_as_native_obj": False,
             "timetable_summary": "2 2 * * *",
             "start_date": None,
@@ -534,7 +522,6 @@ class TestGetDagDetails(TestDagEndpoint):
             "is_paused_upon_creation": None,
             "last_expired": None,
             "last_parsed_time": None,
-            "last_pickled": None,
             "max_active_runs": 16,
             "max_consecutive_failed_dag_runs": 0,
             "max_active_tasks": 16,
@@ -552,7 +539,6 @@ class TestGetDagDetails(TestDagEndpoint):
                     "value": 1,
                 }
             },
-            "pickle_id": None,
             "render_template_as_native_obj": False,
             "timetable_summary": "2 2 * * *",
             "start_date": "2020-06-15T00:00:00+00:00",
@@ -594,7 +580,6 @@ class TestGetDagDetails(TestDagEndpoint):
             "is_paused_upon_creation": None,
             "last_expired": None,
             "last_parsed_time": None,
-            "last_pickled": None,
             "max_active_runs": 16,
             "max_consecutive_failed_dag_runs": 0,
             "max_active_tasks": 16,
@@ -612,7 +597,6 @@ class TestGetDagDetails(TestDagEndpoint):
                     "value": 1,
                 }
             },
-            "pickle_id": None,
             "render_template_as_native_obj": False,
             "timetable_summary": "2 2 * * *",
             "start_date": "2020-06-15T00:00:00+00:00",
@@ -707,12 +691,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_2",
@@ -734,12 +716,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
@@ -773,12 +753,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 }
             ],
             "total_entries": 1,
@@ -813,12 +791,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_DELETED_1",
@@ -840,12 +816,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
@@ -996,12 +970,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 }
             ],
             "total_entries": 1,
@@ -1035,12 +1007,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 }
             ],
             "total_entries": 1,
@@ -1074,12 +1044,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_UNPAUSED_1",
@@ -1101,12 +1069,10 @@ class TestGetDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
@@ -1190,16 +1156,14 @@ class TestPatchDag(TestDagEndpoint):
             "next_dagrun_create_after": None,
             "last_expired": None,
             "max_active_tasks": 16,
-            "last_pickled": None,
             "default_view": None,
             "last_parsed_time": None,
             "timetable_description": None,
             "has_import_errors": False,
-            "pickle_id": None,
         }
         assert response.json == expected_response
         _check_last_log(
-            session, dag_id="TEST_DAG_1", event="api.patch_dag", execution_date=None, expected_extra=payload
+            session, dag_id="TEST_DAG_1", event="api.patch_dag", logical_date=None, expected_extra=payload
         )
 
     def test_should_respond_400_on_invalid_request(self):
@@ -1288,12 +1252,10 @@ class TestPatchDag(TestDagEndpoint):
             "next_dagrun_create_after": None,
             "last_expired": None,
             "max_active_tasks": 16,
-            "last_pickled": None,
             "default_view": None,
             "last_parsed_time": None,
             "timetable_description": None,
             "has_import_errors": False,
-            "pickle_id": None,
         }
         assert response.json == expected_response
 
@@ -1382,12 +1344,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_2",
@@ -1409,17 +1369,15 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
         } == response.json
-        _check_last_log(session, dag_id=None, event="api.patch_dags", execution_date=None)
+        _check_last_log(session, dag_id=None, event="api.patch_dags", logical_date=None)
 
     def test_should_respond_200_on_patch_is_paused_using_update_mask(self, session, url_safe_serializer):
         file_token = url_safe_serializer.dumps("/tmp/dag_1.py")
@@ -1461,12 +1419,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_2",
@@ -1488,17 +1444,15 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
         } == response.json
-        _check_last_log(session, dag_id=None, event="api.patch_dags", execution_date=None)
+        _check_last_log(session, dag_id=None, event="api.patch_dags", logical_date=None)
 
     def test_wrong_value_as_update_mask_rasise(self, session):
         self._create_dag_models(2)
@@ -1580,17 +1534,15 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 }
             ],
             "total_entries": 1,
         } == response.json
-        _check_last_log(session, dag_id=None, event="api.patch_dags", execution_date=None)
+        _check_last_log(session, dag_id=None, event="api.patch_dags", logical_date=None)
 
     def test_only_active_false_returns_all_dags(self, url_safe_serializer, session):
         file_token = url_safe_serializer.dumps("/tmp/dag_1.py")
@@ -1628,12 +1580,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_DELETED_1",
@@ -1655,17 +1605,15 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
         } == response.json
-        _check_last_log(session, dag_id=None, event="api.patch_dags", execution_date=None)
+        _check_last_log(session, dag_id=None, event="api.patch_dags", logical_date=None)
 
     @pytest.mark.parametrize(
         "url, expected_dag_ids",
@@ -1853,12 +1801,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_2",
@@ -1880,12 +1826,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
@@ -1928,12 +1872,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_10",
@@ -1955,12 +1897,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
@@ -2005,12 +1945,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
                 {
                     "dag_id": "TEST_DAG_1",
@@ -2032,12 +1970,10 @@ class TestPatchDags(TestDagEndpoint):
                     "next_dagrun_create_after": None,
                     "last_expired": None,
                     "max_active_tasks": 16,
-                    "last_pickled": None,
                     "default_view": None,
                     "last_parsed_time": None,
                     "timetable_description": None,
                     "has_import_errors": False,
-                    "pickle_id": None,
                 },
             ],
             "total_entries": 2,
@@ -2064,7 +2000,7 @@ class TestDeleteDagEndpoint(TestDagEndpoint):
             environ_overrides={"REMOTE_USER": "test"},
         )
         assert response.status_code == 204
-        _check_last_log(session, dag_id="TEST_DAG_1", event="api.delete_dag", execution_date=None)
+        _check_last_log(session, dag_id="TEST_DAG_1", event="api.delete_dag", logical_date=None)
 
     def test_raise_when_dag_is_not_found(self):
         response = self.client.delete(

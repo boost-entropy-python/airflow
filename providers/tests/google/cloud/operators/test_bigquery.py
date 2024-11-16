@@ -748,7 +748,6 @@ class TestBigQueryOperator:
             ti = create_task_instance_of_operator(
                 BigQueryExecuteQueryOperator,
                 dag_id=TEST_DAG_ID,
-                execution_date=DEFAULT_DATE,
                 task_id=TASK_ID,
                 sql="SELECT * FROM test_table",
             )
@@ -786,7 +785,6 @@ class TestBigQueryOperator:
             ti = create_task_instance_of_operator(
                 BigQueryExecuteQueryOperator,
                 dag_id=TEST_DAG_ID,
-                execution_date=DEFAULT_DATE,
                 task_id=TASK_ID,
                 sql=["SELECT * FROM test_table", "SELECT * FROM test_table2"],
             )
@@ -847,9 +845,8 @@ class TestBigQueryOperator:
     ):
         with pytest.warns(AirflowProviderDeprecationWarning):
             ti = create_task_instance_of_operator(
-                BigQueryExecuteQueryOperator,
+                operator_class=BigQueryExecuteQueryOperator,
                 dag_id=TEST_DAG_ID,
-                execution_date=DEFAULT_DATE,
                 task_id=TASK_ID,
                 sql="SELECT * FROM test_table",
             )
@@ -871,7 +868,6 @@ class TestBigQueryOperator:
             ti = create_task_instance_of_operator(
                 BigQueryExecuteQueryOperator,
                 dag_id=TEST_DAG_ID,
-                execution_date=DEFAULT_DATE,
                 task_id=TASK_ID,
                 sql=["SELECT * FROM test_table", "SELECT * FROM test_table2"],
             )
@@ -2578,7 +2574,7 @@ class TestBigQueryValueCheckOperator:
         """
         Assert the exception if require param not pass to BigQueryValueCheckOperator with deferrable=True
         """
-        with pytest.raises(AirflowException) as missing_param:
+        with pytest.raises((TypeError, AirflowException)) as missing_param:
             BigQueryValueCheckOperator(deferrable=True, **kwargs)
         assert missing_param.value.args[0] == expected
 
@@ -2590,7 +2586,7 @@ class TestBigQueryValueCheckOperator:
             "missing keyword arguments 'sql', 'pass_value'",
             "missing keyword arguments 'pass_value', 'sql'",
         )
-        with pytest.raises(AirflowException) as missing_param:
+        with pytest.raises((TypeError, AirflowException)) as missing_param:
             BigQueryValueCheckOperator(deferrable=True, kwargs={})
         assert missing_param.value.args[0] in (expected, expected1)
 

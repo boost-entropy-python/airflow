@@ -30,7 +30,7 @@ from airflow.models.taskinstance import TaskInstance, TaskInstance as TI, clear_
 from airflow.models.taskinstancehistory import TaskInstanceHistory
 from airflow.models.taskreschedule import TaskReschedule
 from airflow.operators.empty import EmptyOperator
-from airflow.sensors.python import PythonSensor
+from airflow.providers.standard.sensors.python import PythonSensor
 from airflow.utils.session import create_session
 from airflow.utils.state import DagRunState, State, TaskInstanceState
 from airflow.utils.types import DagRunType
@@ -644,7 +644,7 @@ class TestClearTasks:
 
             triggered_by_kwargs = {"triggered_by": DagRunTriggeredByType.TEST} if AIRFLOW_V_3_0_PLUS else {}
             dr = dag.create_dagrun(
-                execution_date=DEFAULT_DATE,
+                logical_date=DEFAULT_DATE,
                 state=State.RUNNING,
                 run_type=DagRunType.SCHEDULED,
                 session=session,
