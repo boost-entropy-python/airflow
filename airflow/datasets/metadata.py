@@ -17,18 +17,17 @@
 
 from __future__ import annotations
 
-from functools import wraps
-from typing import Callable, TypeVar
+import warnings
 
-from airflow.typing_compat import ParamSpec
+from airflow.sdk.definitions.asset.metadata import Metadata
 
-PS = ParamSpec("PS")
-RT = TypeVar("RT")
+# TODO: Remove this module in Airflow 3.2
 
+warnings.warn(
+    "Import from the airflow.dataset module is deprecated and "
+    "will be removed in the Airflow 3.2. Please import it from 'airflow.sdk.definitions.asset.metadata'.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
-def internal_api_call(func: Callable[PS, RT]) -> Callable[PS, RT]:
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
-
-    return wrapper
+__all__ = ["Metadata"]
