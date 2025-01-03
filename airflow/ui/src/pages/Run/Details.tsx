@@ -36,11 +36,7 @@ export const Details = () => {
   const tryNumberParam = searchParams.get("try_number");
   const mapIndex = parseInt(mapIndexParam ?? "-1", 10);
 
-  const {
-    data: taskInstance,
-    error,
-    isLoading,
-  } = useTaskInstanceServiceGetMappedTaskInstance({
+  const { data: taskInstance } = useTaskInstanceServiceGetMappedTaskInstance({
     dagId,
     dagRunId: runId,
     mapIndex,
@@ -63,7 +59,7 @@ export const Details = () => {
     dagRunId: runId,
     mapIndex,
     taskId,
-    taskTryNumber: tryNumber,
+    taskTryNumber: tryNumber ?? 1,
   });
 
   return (
@@ -83,7 +79,7 @@ export const Details = () => {
             <Table.Cell>Status</Table.Cell>
             <Table.Cell>
               <Flex gap={1}>
-                <Status state={tryInstance?.state ?? undefined} />
+                <Status state={tryInstance?.state ?? null} />
                 {tryInstance?.state ?? "no status"}
               </Flex>
             </Table.Cell>
@@ -141,7 +137,7 @@ export const Details = () => {
             <Table.Cell>
               <HStack>
                 {tryInstance?.pid}
-                <ClipboardRoot value={tryInstance?.pid}>
+                <ClipboardRoot value={String(tryInstance?.pid ?? "")}>
                   <ClipboardIconButton />
                 </ClipboardRoot>
               </HStack>
@@ -152,7 +148,7 @@ export const Details = () => {
             <Table.Cell>
               <HStack>
                 {tryInstance?.hostname}
-                <ClipboardRoot value={tryInstance?.hostname}>
+                <ClipboardRoot value={tryInstance?.hostname ?? ""}>
                   <ClipboardIconButton />
                 </ClipboardRoot>
               </HStack>
