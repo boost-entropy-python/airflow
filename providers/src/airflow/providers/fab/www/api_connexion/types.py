@@ -16,27 +16,15 @@
 # under the License.
 from __future__ import annotations
 
-from flask_appbuilder.security.views import RoleModelView
+from collections.abc import Mapping, Sequence
+from typing import Any, Optional, Union
 
-from airflow.providers.fab.www.security import permissions
+from flask import Response
 
+APIResponse = Union[
+    Response,
+    tuple[object, int],  # For '(NoContent, 201)'.
+    Mapping[str, Any],  # JSON.
+]
 
-class CustomRoleModelView(RoleModelView):
-    """Customize permission names for FAB's builtin RoleModelView."""
-
-    class_permission_name = permissions.RESOURCE_ROLE
-    method_permission_name = {
-        "delete": "delete",
-        "download": "read",
-        "show": "read",
-        "list": "read",
-        "edit": "edit",
-        "add": "create",
-        "copy_role": "create",
-    }
-    base_permissions = [
-        permissions.ACTION_CAN_CREATE,
-        permissions.ACTION_CAN_READ,
-        permissions.ACTION_CAN_EDIT,
-        permissions.ACTION_CAN_DELETE,
-    ]
+UpdateMask = Optional[Sequence[str]]
