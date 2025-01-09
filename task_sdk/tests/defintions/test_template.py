@@ -14,37 +14,30 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 from __future__ import annotations
 
-import os
-
-import pytest
-from fastapi.testclient import TestClient
-
-from airflow.api_fastapi.app import create_app
-
-from tests_common.test_utils.db import parse_and_sync_to_db
+from airflow.sdk.definitions._internal.templater import Templater
+from airflow.sdk.definitions.template import literal
 
 
-@pytest.fixture
-def test_client():
-    return TestClient(create_app())
+def test_not_render_literal_value():
+    templater = Templater()
+    templater.template_ext = []
+    context = {}
+    content = literal("Hello {{ name }}")
+
+    rendered_content = templater.render_template(content, context)
+
+    assert rendered_content == "Hello {{ name }}"
 
 
-@pytest.fixture
-def client():
-    """This fixture is more flexible than test_client, as it allows to specify which apps to include."""
+def test_not_render_file_literal_value():
+    templater = Templater()
+    templater.template_ext = [".txt"]
+    context = {}
+    content = literal("template_file.txt")
 
-    def create_test_client(apps="all"):
-        app = create_app(apps=apps)
-        return TestClient(app)
+    rendered_content = templater.render_template(content, context)
 
-    return create_test_client
-
-
-@pytest.fixture(scope="module")
-def dagbag():
-    from airflow.models import DagBag
-
-    parse_and_sync_to_db(os.devnull, include_examples=True)
-    return DagBag(read_dags_from_db=True)
+    assert rendered_content == "template_file.txt"

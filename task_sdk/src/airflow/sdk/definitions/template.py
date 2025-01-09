@@ -16,35 +16,17 @@
 # under the License.
 from __future__ import annotations
 
-import os
+from typing import Any
 
-import pytest
-from fastapi.testclient import TestClient
-
-from airflow.api_fastapi.app import create_app
-
-from tests_common.test_utils.db import parse_and_sync_to_db
+from airflow.sdk.definitions._internal.templater import LiteralValue
 
 
-@pytest.fixture
-def test_client():
-    return TestClient(create_app())
+def literal(value: Any) -> LiteralValue:
+    """
+    Wrap a value to ensure it is rendered as-is without applying Jinja templating to its contents.
 
+    Designed for use in an operator's template field.
 
-@pytest.fixture
-def client():
-    """This fixture is more flexible than test_client, as it allows to specify which apps to include."""
-
-    def create_test_client(apps="all"):
-        app = create_app(apps=apps)
-        return TestClient(app)
-
-    return create_test_client
-
-
-@pytest.fixture(scope="module")
-def dagbag():
-    from airflow.models import DagBag
-
-    parse_and_sync_to_db(os.devnull, include_examples=True)
-    return DagBag(read_dags_from_db=True)
+    :param value: The value to be rendered without templating
+    """
+    return LiteralValue(value)

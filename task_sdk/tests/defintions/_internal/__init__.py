@@ -14,37 +14,3 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-from __future__ import annotations
-
-import os
-
-import pytest
-from fastapi.testclient import TestClient
-
-from airflow.api_fastapi.app import create_app
-
-from tests_common.test_utils.db import parse_and_sync_to_db
-
-
-@pytest.fixture
-def test_client():
-    return TestClient(create_app())
-
-
-@pytest.fixture
-def client():
-    """This fixture is more flexible than test_client, as it allows to specify which apps to include."""
-
-    def create_test_client(apps="all"):
-        app = create_app(apps=apps)
-        return TestClient(app)
-
-    return create_test_client
-
-
-@pytest.fixture(scope="module")
-def dagbag():
-    from airflow.models import DagBag
-
-    parse_and_sync_to_db(os.devnull, include_examples=True)
-    return DagBag(read_dags_from_db=True)
