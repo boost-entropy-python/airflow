@@ -16,19 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import type { ParamSchema } from "src/queries/useDagParams";
+import { Box, type BoxProps } from "@chakra-ui/react";
 
-import type { FlexibleFormElementProps } from ".";
-import { paramPlaceholder, useParamStore } from "../TriggerDag/useParamStore";
-import { FieldRow } from "./FieldRow";
-import { HiddenInput } from "./HiddenInput";
-
-const isHidden = (fieldSchema: ParamSchema) => Boolean(fieldSchema.const);
-
-/** Generates a form row */
-export const Row = ({ name }: FlexibleFormElementProps) => {
-  const { paramsDict } = useParamStore();
-  const param = paramsDict[name] ?? paramPlaceholder;
-
-  return isHidden(param.schema) ? <HiddenInput name={name} /> : <FieldRow name={name} />;
-};
+export const DurationAxis = (props: BoxProps) => (
+  <Box borderBottomWidth={1} left="30px" position="absolute" right="25px" zIndex={0} {...props} />
+);
