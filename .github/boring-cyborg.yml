@@ -31,10 +31,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/amazon/aws/**/*
 
   provider:apache-beam:
-    - providers/src/airflow/providers/apache/beam/**/*
-    - docs/apache-airflow-providers-apache-beam/**/*
-    - providers/tests/apache/beam/**/*
-    - providers/tests/system/apache/beam/**/*
+    - providers/apache/beam/**
 
   provider:apache-cassandra:
     - providers/src/airflow/providers/apache/cassandra/**/*
@@ -97,10 +94,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/apache/livy/**/*
 
   provider:apache-pig:
-    - providers/src/airflow/providers/apache/pig/**/*
-    - docs/apache-airflow-providers-apache-pig/**/*
-    - providers/tests/apache/pig/**/*
-    - providers/tests/system/apache/pig/**/*
+    - providers/apache/pig/**
 
   provider:apache-pinot:
     - providers/src/airflow/providers/apache/pinot/**/*
@@ -109,10 +103,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/apache/pinot/**/*
 
   provider:apache-spark:
-    - providers/src/airflow/providers/apache/spark/**/*
-    - docs/apache-airflow-providers-apache-spark/**/*
-    - providers/tests/apache/spark/**/*
-    - providers/tests/system/apache/spark/**/*
+    - providers/apache/spark/**
 
   provider:apprise:
     - providers/src/airflow/providers/apprise/**/*
@@ -249,9 +240,7 @@ labelPRBasedOnFilePath:
     - providers/tests/grpc/**/*
 
   provider:hashicorp:
-    - providers/src/airflow/providers/hashicorp/**/*
-    - docs/apache-airflow-providers-hashicorp/**/*
-    - providers/tests/hashicorp/**/*
+    - providers/hashicorp/**
 
   provider:http:
     - providers/src/airflow/providers/http/**/*
@@ -260,9 +249,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/http/**/*
 
   provider:imap:
-    - providers/src/airflow/providers/imap/**/*
-    - docs/apache-airflow-providers-imap/**/*
-    - providers/tests/imap/**/*
+    - providers/imap/**
 
   provider:influxdb:
     - providers/src/airflow/providers/influxdb/**/*
@@ -277,10 +264,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/jdbc/**/*
 
   provider:jenkins:
-    - providers/src/airflow/providers/jenkins/**/*
-    - docs/apache-airflow-providers-jenkins/**/*
-    - providers/tests/jenkins/**/*
-    - providers/tests/system/jenkins/**/*
+    - providers/jenkins/**
 
   provider:microsoft-azure:
     - providers/src/airflow/providers/microsoft/azure/**/*
@@ -311,29 +295,19 @@ labelPRBasedOnFilePath:
     - providers/tests/mongo/**/*
 
   provider:mysql:
-    - providers/src/airflow/providers/mysql/**/*
-    - docs/apache-airflow-providers-mysql/**/*
-    - providers/tests/mysql/**/*
-    - providers/tests/system/mysql/**/*
+    - providers/mysql/**
 
   provider:neo4j:
-    - providers/src/airflow/providers/neo4j/**/*
-    - docs/apache-airflow-providers-neo4j/**/*
-    - providers/tests/neo4j/**/*
-    - providers/tests/system/neo4j/**/*
+    - providers/neo4j/**
 
   provider:odbc:
-    - providers/src/airflow/providers/odbc/**/*
-    - docs/apache-airflow-providers-odbc/**/*
-    - providers/tests/odbc/**/*
+    - providers/odbc/**
 
   provider:openai:
     - providers/openai/**
 
   provider:openfaas:
-    - providers/src/airflow/providers/openfaas/**/*
-    - docs/apache-airflow-providers-openfaas/**/*
-    - providers/tests/openfaas/**/*
+    - providers/openfaas/**
 
   provider:openlineage:
     - providers/src/airflow/providers/openlineage/**/*
@@ -347,10 +321,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/opensearch/**/*
 
   provider:opsgenie:
-    - providers/src/airflow/providers/opsgenie/**/*
-    - docs/apache-airflow-providers-opsgenie/**/*
-    - providers/tests/opsgenie/**/*
-    - providers/tests/system/opsgenie/**/*
+    - providers/opsgenie/**
 
   provider:Oracle:
     - providers/src/airflow/providers/oracle/**/*
@@ -358,15 +329,10 @@ labelPRBasedOnFilePath:
     - providers/tests/oracle/**/*
 
   provider:pagerduty:
-    - providers/src/airflow/providers/pagerduty/**/*
-    - docs/apache-airflow-providers-pagerduty/**/*
-    - providers/tests/pagerduty/**/*
+    - providers/pagerduty/**
 
   provider:papermill:
-    - providers/src/airflow/providers/papermill/**/*
-    - docs/apache-airflow-providers-papermill/**/*
-    - providers/tests/papermill/**/*
-    - providers/tests/system/papermill/**/*
+    - providers/papermill/**
 
   provider:pgvector:
     - providers/pgvector/**
@@ -384,10 +350,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/presto/**/*
 
   provider:qdrant:
-    - providers/src/airflow/providers/qdrant/**/*
-    - docs/apache-airflow-providers-qdrant/**/*
-    - providers/tests/qdrant/**/*
-    - providers/tests/system/qdrant/**/*
+    - providers/qdrant/**
 
   provider:redis:
     - providers/src/airflow/providers/redis/**/*
@@ -401,9 +364,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/salesforce/**/*
 
   provider:samba:
-    - providers/src/airflow/providers/samba/**/*
-    - docs/apache-airflow-providers-samba/**/*
-    - providers/tests/samba/**/*
+    - providers/samba/**
 
   provider:segment:
     - providers/segment/**
@@ -417,10 +378,7 @@ labelPRBasedOnFilePath:
     - providers/tests/sftp/**/*
 
   provider:singularity:
-    - providers/src/airflow/providers/singularity/**/*
-    - docs/apache-airflow-providers-singularity/**/*
-    - providers/tests/singularity/**/*
-    - providers/tests/system/singularity/**/*
+    - providers/singularity/**
 
   provider:slack:
     - providers/src/airflow/providers/slack/**/*
@@ -449,10 +407,7 @@ labelPRBasedOnFilePath:
     - providers/ssh/**
 
   provider:tableau:
-    - providers/src/airflow/providers/tableau/**/*
-    - docs/apache-airflow-providers-tableau/**/*
-    - providers/tests/tableau/**/*
-    - providers/tests/system/tableau/**/*
+    - providers/tableau/**
 
   provider:telegram:
     - providers/telegram/**
