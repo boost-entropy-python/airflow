@@ -76,10 +76,7 @@ labelPRBasedOnFilePath:
     - providers/tests/apache/impala/**/*
 
   provider:apache-kafka:
-    - providers/src/airflow/providers/apache/kafka/**/*
-    - docs/apache-airflow-providers-apache-kafka/**/*
-    - providers/tests/apache/kafka/**/*
-    - providers/tests/system/apache/kafka/**/*
+    - providers/apache/kafka/**
 
   provider:apache-kylin:
     - providers/apache/kylin/**
@@ -175,9 +172,7 @@ labelPRBasedOnFilePath:
     - providers/tests/system/dingding/**/*
 
   provider:discord:
-    - providers/src/airflow/providers/discord/**/*
-    - docs/apache-airflow-providers-discord/**/*
-    - providers/tests/discord/**/*
+    - providers/discord/**
 
   provider:docker:
     - providers/src/airflow/providers/docker/**/*
@@ -232,10 +227,7 @@ labelPRBasedOnFilePath:
     - providers/hashicorp/**
 
   provider:http:
-    - providers/src/airflow/providers/http/**/*
-    - docs/apache-airflow-providers-http/**/*
-    - providers/tests/http/**/*
-    - providers/tests/system/http/**/*
+    - providers/http/**
 
   provider:imap:
     - providers/imap/**
