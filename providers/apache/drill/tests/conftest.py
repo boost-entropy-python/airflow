@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -17,18 +16,17 @@
 # under the License.
 from __future__ import annotations
 
-from sqlalchemy import Column, Integer, String, Text
+import pathlib
 
-from airflow.models.base import Base, StringID
-from airflow.utils.sqlalchemy import UtcDateTime
+import pytest
+
+pytest_plugins = "tests_common.pytest_plugin"
 
 
-class ParseImportError(Base):
-    """Stores all Import Errors which are recorded when parsing DAGs and displayed on the Webserver."""
-
-    __tablename__ = "import_error"
-    id = Column(Integer, primary_key=True)
-    timestamp = Column(UtcDateTime)
-    filename = Column(String(1024))  # todo AIP-66: make this bundle and relative fileloc
-    bundle_name = Column(StringID())
-    stacktrace = Column(Text)
+@pytest.hookimpl(tryfirst=True)
+def pytest_configure(config: pytest.Config) -> None:
+    deprecations_ignore_path = pathlib.Path(__file__).parent.joinpath("deprecations_ignore.yml")
+    dep_path = [deprecations_ignore_path] if deprecations_ignore_path.exists() else []
+    config.inicfg["airflow_deprecations_ignore"] = (
+        config.inicfg.get("airflow_deprecations_ignore", []) + dep_path  # type: ignore[assignment,operator]
+    )
