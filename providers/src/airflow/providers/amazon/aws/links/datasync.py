@@ -16,30 +16,22 @@
 # under the License.
 from __future__ import annotations
 
-from datetime import datetime
+from airflow.providers.amazon.aws.links.base_aws import BASE_AWS_CONSOLE_LINK, BaseAwsLink
 
-from airflow import DAG
-from airflow.providers.standard.operators.python import PythonOperator
-from airflow.sdk.definitions.param import Param
 
-with DAG(
-    "test_invalid_param4",
-    start_date=datetime(2021, 1, 1),
-    schedule="0 0 * * *",
-    params={
-        # a mandatory string but the default is not valid in length validation
-        "str_param": Param(default="banana", type="string", minLength=2, maxLength=4),
-    },
-) as the_dag:
+class DataSyncTaskLink(BaseAwsLink):
+    """Helper class for constructing AWS DataSync Task console link."""
 
-    def print_these(*params):
-        for param in params:
-            print(param)
+    name = "DataSync Task"
+    key = "datasync_task"
+    format_str = BASE_AWS_CONSOLE_LINK + "/datasync/home?region={region_name}#" + "/tasks/{task_id}"
 
-    PythonOperator(
-        task_id="ref_params",
-        python_callable=print_these,
-        op_args=[
-            "{{ params.str_param }}",
-        ],
+
+class DataSyncTaskExecutionLink(BaseAwsLink):
+    """Helper class for constructing AWS DataSync TaskExecution console link."""
+
+    name = "DataSync Task Execution"
+    key = "datasync_task_execution"
+    format_str = (
+        BASE_AWS_CONSOLE_LINK + "/datasync/home?region={region_name}#/history/{task_id}/{task_execution_id}"
     )
