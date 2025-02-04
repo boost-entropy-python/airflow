@@ -177,6 +177,8 @@ import type {
   GetXcomEntryResponse,
   GetXcomEntriesData,
   GetXcomEntriesResponse,
+  CreateXcomEntryData,
+  CreateXcomEntryResponse,
   GetTasksData,
   GetTasksResponse,
   GetTaskData,
@@ -2839,6 +2841,7 @@ export class PoolService {
    * @param data.limit
    * @param data.offset
    * @param data.orderBy
+   * @param data.poolNamePattern
    * @returns PoolCollectionResponse Successful Response
    * @throws ApiError
    */
@@ -2850,6 +2853,7 @@ export class PoolService {
         limit: data.limit,
         offset: data.offset,
         order_by: data.orderBy,
+        pool_name_pattern: data.poolNamePattern,
       },
       errors: {
         401: "Unauthorized",
@@ -3004,6 +3008,38 @@ export class XcomService {
         limit: data.limit,
         offset: data.offset,
       },
+      errors: {
+        400: "Bad Request",
+        401: "Unauthorized",
+        403: "Forbidden",
+        404: "Not Found",
+        422: "Validation Error",
+      },
+    });
+  }
+
+  /**
+   * Create Xcom Entry
+   * Create an XCom entry.
+   * @param data The data for the request.
+   * @param data.dagId
+   * @param data.taskId
+   * @param data.dagRunId
+   * @param data.requestBody
+   * @returns XComResponseNative Successful Response
+   * @throws ApiError
+   */
+  public static createXcomEntry(data: CreateXcomEntryData): CancelablePromise<CreateXcomEntryResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/public/dags/{dag_id}/dagRuns/{dag_run_id}/taskInstances/{task_id}/xcomEntries",
+      path: {
+        dag_id: data.dagId,
+        task_id: data.taskId,
+        dag_run_id: data.dagRunId,
+      },
+      body: data.requestBody,
+      mediaType: "application/json",
       errors: {
         400: "Bad Request",
         401: "Unauthorized",
