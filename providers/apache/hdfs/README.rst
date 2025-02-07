@@ -22,41 +22,44 @@
     `PROVIDER_README_TEMPLATE.rst.jinja2` IN the `dev/breeze/src/airflow_breeze/templates` DIRECTORY
 
 
-Package ``apache-airflow-providers-asana``
+Package ``apache-airflow-providers-apache-hdfs``
 
-Release: ``2.7.0``
+Release: ``4.7.0``
 
 
-`Asana <https://asana.com/>`__
+`Hadoop Distributed File System (HDFS) <https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html>`__
+and `WebHDFS <https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/WebHDFS.html>`__.
 
 
 Provider package
 ----------------
 
-This is a provider package for ``asana`` provider. All classes for this provider package
-are in ``airflow.providers.asana`` python package.
+This is a provider package for ``apache.hdfs`` provider. All classes for this provider package
+are in ``airflow.providers.apache.hdfs`` python package.
 
 You can find package information and changelog for the provider
-in the `documentation <https://airflow.apache.org/docs/apache-airflow-providers-asana/2.7.0/>`_.
+in the `documentation <https://airflow.apache.org/docs/apache-airflow-providers-apache-hdfs/4.7.0/>`_.
 
 Installation
 ------------
 
 You can install this package on top of an existing Airflow 2 installation (see ``Requirements`` below
 for the minimum Airflow version supported) via
-``pip install apache-airflow-providers-asana``
+``pip install apache-airflow-providers-apache-hdfs``
 
 The package supports the following python versions: 3.9,3.10,3.11,3.12
 
 Requirements
 ------------
 
-==================  ==================
-PIP package         Version required
-==================  ==================
-``apache-airflow``  ``>=2.9.0``
-``asana``           ``>=5.0.0``
-==================  ==================
+=================================  =====================================
+PIP package                        Version required
+=================================  =====================================
+``apache-airflow``                 ``>=2.9.0``
+``hdfs[avro,dataframe,kerberos]``  ``>=2.5.4; python_version < "3.12"``
+``hdfs[avro,dataframe,kerberos]``  ``>=2.7.3; python_version >= "3.12"``
+``pandas``                         ``>=2.1.2,<2.2``
+=================================  =====================================
 
 The changelog for the provider package can be found in the
-`changelog <https://airflow.apache.org/docs/apache-airflow-providers-asana/2.7.0/changelog.html>`_.
+`changelog <https://airflow.apache.org/docs/apache-airflow-providers-apache-hdfs/4.7.0/changelog.html>`_.
