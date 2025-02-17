@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,21 +14,35 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-set -euxo pipefail
 
-cd "$( dirname "${BASH_SOURCE[0]}" )/../../"
+from __future__ import annotations
 
-PYTHON_ARG=""
+from typing import Generic, Literal, TypeVar
 
-PIP_VERSION="25.0.1"
-UV_VERSION="0.6.0"
-if [[ ${PYTHON_VERSION=} != "" ]]; then
-    PYTHON_ARG="--python=$(which python"${PYTHON_VERSION}") "
-fi
+from airflow.api_fastapi.core_api.base import BaseModel
 
-python -m pip install --upgrade "pip==${PIP_VERSION}"
-python -m pip install "uv==${UV_VERSION}"
-uv tool uninstall apache-airflow-breeze >/dev/null 2>&1 || true
-# shellcheck disable=SC2086
-uv tool install ${PYTHON_ARG} --force --editable ./dev/breeze/
-echo '/home/runner/.local/bin' >> "${GITHUB_PATH}"
+
+class BaseEdgeResponse(BaseModel):
+    """Base Edge serializer for responses."""
+
+    source_id: str
+    target_id: str
+
+
+class BaseNodeResponse(BaseModel):
+    """Base Node serializer for responses."""
+
+    id: str
+    label: str
+    type: Literal["join", "task", "asset-condition", "asset", "asset-alias", "dag", "sensor", "trigger"]
+
+
+E = TypeVar("E", bound=BaseEdgeResponse)
+N = TypeVar("N", bound=BaseNodeResponse)
+
+
+class BaseGraphResponse(BaseModel, Generic[E, N]):
+    """Base Graph serializer for responses."""
+
+    edges: list[E]
+    nodes: list[N]
