@@ -476,10 +476,10 @@ export type DAGDetailsResponse = {
   max_consecutive_failed_dag_runs: number;
   has_task_concurrency_limits: boolean;
   has_import_errors: boolean;
-  next_dagrun: string | null;
+  next_dagrun_logical_date: string | null;
   next_dagrun_data_interval_start: string | null;
   next_dagrun_data_interval_end: string | null;
-  next_dagrun_create_after: string | null;
+  next_dagrun_run_after: string | null;
   owners: Array<string>;
   catchup: boolean;
   dag_run_timeout: string | null;
@@ -535,10 +535,10 @@ export type DAGResponse = {
   max_consecutive_failed_dag_runs: number;
   has_task_concurrency_limits: boolean;
   has_import_errors: boolean;
-  next_dagrun: string | null;
+  next_dagrun_logical_date: string | null;
   next_dagrun_data_interval_start: string | null;
   next_dagrun_data_interval_end: string | null;
-  next_dagrun_create_after: string | null;
+  next_dagrun_run_after: string | null;
   owners: Array<string>;
   /**
    * Return file token.
@@ -710,10 +710,10 @@ export type DAGWithLatestDagRunsResponse = {
   max_consecutive_failed_dag_runs: number;
   has_task_concurrency_limits: boolean;
   has_import_errors: boolean;
-  next_dagrun: string | null;
+  next_dagrun_logical_date: string | null;
   next_dagrun_data_interval_start: string | null;
   next_dagrun_data_interval_end: string | null;
-  next_dagrun_create_after: string | null;
+  next_dagrun_run_after: string | null;
   owners: Array<string>;
   latest_dag_runs: Array<DAGRunResponse>;
   /**
@@ -1266,6 +1266,7 @@ export type TaskInstanceResponse = {
   dag_run_id: string;
   map_index: number;
   logical_date: string | null;
+  run_after: string;
   start_date: string | null;
   end_date: string | null;
   duration: number | null;
@@ -1341,6 +1342,8 @@ export type TaskInstancesBatchBody = {
   dag_run_ids?: Array<string> | null;
   task_ids?: Array<string> | null;
   state?: Array<TaskInstanceState | null> | null;
+  run_after_gte?: string | null;
+  run_after_lte?: string | null;
   logical_date_gte?: string | null;
   logical_date_lte?: string | null;
   start_date_gte?: string | null;
@@ -2092,6 +2095,8 @@ export type GetMappedTaskInstancesData = {
   orderBy?: string;
   pool?: Array<string>;
   queue?: Array<string>;
+  runAfterGte?: string | null;
+  runAfterLte?: string | null;
   startDateGte?: string | null;
   startDateLte?: string | null;
   state?: Array<string>;
@@ -2174,6 +2179,8 @@ export type GetTaskInstancesData = {
   orderBy?: string;
   pool?: Array<string>;
   queue?: Array<string>;
+  runAfterGte?: string | null;
+  runAfterLte?: string | null;
   startDateGte?: string | null;
   startDateLte?: string | null;
   state?: Array<string>;
