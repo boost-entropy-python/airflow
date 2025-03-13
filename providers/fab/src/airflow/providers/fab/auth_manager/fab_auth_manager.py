@@ -26,8 +26,7 @@ from urllib.parse import urljoin
 import packaging.version
 from connexion import FlaskApi
 from fastapi import FastAPI
-from flask import Blueprint, g, url_for
-from flask_login import logout_user
+from flask import Blueprint, g
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 from starlette.middleware.wsgi import WSGIMiddleware
@@ -427,15 +426,9 @@ class FabAuthManager(BaseAuthManager[User]):
         """Return the login page url."""
         return urljoin(self.apiserver_endpoint, f"{AUTH_MANAGER_FASTAPI_APP_PREFIX}/login/")
 
-    def get_url_logout(self):
+    def get_url_logout(self) -> str | None:
         """Return the logout page url."""
-        if not self.security_manager.auth_view:
-            raise AirflowException("`auth_view` not defined in the security manager.")
-        return url_for(f"{self.security_manager.auth_view.endpoint}.logout")
-
-    def logout(self) -> None:
-        """Logout the user."""
-        logout_user()
+        return urljoin(self.apiserver_endpoint, f"{AUTH_MANAGER_FASTAPI_APP_PREFIX}/logout/")
 
     def register_views(self) -> None:
         self.security_manager.register_views()
@@ -447,33 +440,27 @@ class FabAuthManager(BaseAuthManager[User]):
             {
                 "resource_type": "List Users",
                 "text": "Users",
-                "href": AUTH_MANAGER_FASTAPI_APP_PREFIX
-                + url_for(f"{self.security_manager.user_view.__class__.__name__}.list", _external=False),
+                "href": f"{AUTH_MANAGER_FASTAPI_APP_PREFIX}/users/list/",
             },
             {
                 "resource_type": "List Roles",
                 "text": "Roles",
-                "href": AUTH_MANAGER_FASTAPI_APP_PREFIX
-                + url_for("CustomRoleModelView.list", _external=False),
+                "href": f"{AUTH_MANAGER_FASTAPI_APP_PREFIX}/roles/list/",
             },
             {
                 "resource_type": "Actions",
                 "text": "Actions",
-                "href": AUTH_MANAGER_FASTAPI_APP_PREFIX + url_for("ActionModelView.list", _external=False),
+                "href": f"{AUTH_MANAGER_FASTAPI_APP_PREFIX}/actions/list/",
             },
             {
                 "resource_type": "Resources",
                 "text": "Resources",
-                "href": AUTH_MANAGER_FASTAPI_APP_PREFIX + url_for("ResourceModelView.list", _external=False),
+                "href": f"{AUTH_MANAGER_FASTAPI_APP_PREFIX}/resources/list/",
             },
             {
                 "resource_type": "Permission Pairs",
                 "text": "Permissions",
-                "href": AUTH_MANAGER_FASTAPI_APP_PREFIX
-                + url_for(
-                    "PermissionPairModelView.list",
-                    _external=False,
-                ),
+                "href": f"{AUTH_MANAGER_FASTAPI_APP_PREFIX}/permissions/list/",
             },
         ]
 
