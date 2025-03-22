@@ -222,10 +222,6 @@ dependencies = [
     # In addition FAB also limit sqlalchemy to < 2.0
     "pandas>=1.2.5,<2.2",
 ]
-"password" = [
-    "bcrypt>=2.0.0",
-    "flask-bcrypt>=0.7.1",
-]
 "rabbitmq" = [
     "amqp>=5.2.0",
 ]
@@ -272,7 +268,8 @@ include = [
     "NOTICE"
 ]
 exclude = [
-    "src/airflow/ui/node_modules/"
+    "src/airflow/ui/node_modules/",
+    "src/airflow/api_fastapi/auth/managers/simple/ui/node_modules",
 ]
 
 [tool.hatch.build.targets.custom]
@@ -291,6 +288,10 @@ artifacts = [
     "airflow/ui/dist/",
     "airflow/api_fastapi/auth/managers/simple/ui/dist/",
     "airflow/git_version"
+]
+exclude = [
+    "src/airflow/ui/node_modules/",
+    "src/airflow/api_fastapi/auth/managers/simple/ui/node_modules",
 ]
 
 [dependency-groups]
