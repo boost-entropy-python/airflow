@@ -16,31 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { Flex } from "@chakra-ui/react";
 
-type Asset = {
-  asset: {
-    group: string;
-    id: number;
-    name: string;
-    uri: string;
+import { Alert } from "./ui";
+
+type Props = {
+  readonly warning?: {
+    message: string;
   };
 };
 
-type Alias = {
-  alias: {
-    group: string;
-    name: string;
-  };
+export const WarningAlert = ({ warning }: Props) => {
+  if (!Boolean(warning)) {
+    return undefined;
+  }
+
+  return (
+    <Alert status="warning">
+      <Flex align="center">{warning?.message}</Flex>
+    </Alert>
+  );
 };
-
-export type NextRunEvent = { id: number; lastUpdate: string | null; name: string | null; uri: string };
-
-export type AssetSummary = Alias | Asset;
-
-export type ExpressionType =
-  | Alias
-  | Asset
-  | {
-      all?: Array<AssetSummary | ExpressionType>;
-      any?: Array<AssetSummary | ExpressionType>;
-    };
