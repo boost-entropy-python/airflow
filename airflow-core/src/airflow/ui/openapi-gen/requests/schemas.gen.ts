@@ -482,6 +482,10 @@ export const $BackfillResponse = {
       format: "date-time",
       title: "Updated At",
     },
+    dag_display_name: {
+      type: "string",
+      title: "Dag Display Name",
+    },
   },
   type: "object",
   required: [
@@ -496,6 +500,7 @@ export const $BackfillResponse = {
     "created_at",
     "completed_at",
     "updated_at",
+    "dag_display_name",
   ],
   title: "BackfillResponse",
   description: "Base serializer for Backfill.",
@@ -3410,6 +3415,8 @@ export const $JobResponse = {
   description: "Job serializer for responses.",
 } as const;
 
+export const $JsonValue = {} as const;
+
 export const $PatchTaskInstanceBody = {
   properties: {
     new_state: {
@@ -5451,8 +5458,7 @@ export const $VariableBody = {
       title: "Key",
     },
     value: {
-      type: "string",
-      title: "Value",
+      $ref: "#/components/schemas/JsonValue",
     },
     description: {
       anyOf: [
