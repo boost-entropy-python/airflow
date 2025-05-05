@@ -15,8 +15,26 @@
 # specific language governing permissions and limitations
 # under the License.
 
-"""Re exporting the new cache module from Task SDK for backward compatibility."""
-
 from __future__ import annotations
 
-from airflow.sdk.execution_time.cache import SecretCache as SecretCache
+from cadwyn import VersionChange, schema
+
+from airflow.api_fastapi.execution_api.datamodels.taskinstance import (
+    TIDeferredStatePayload,
+    TIRetryStatePayload,
+    TISuccessStatePayload,
+    TITerminalStatePayload,
+)
+
+
+class AddRenderedMapIndexField(VersionChange):
+    """Add the `rendered_map_index` field to payload models."""
+
+    description = __doc__
+
+    instructions_to_migrate_to_previous_version = (
+        schema(TITerminalStatePayload).field("rendered_map_index").didnt_exist,
+        schema(TISuccessStatePayload).field("rendered_map_index").didnt_exist,
+        schema(TIDeferredStatePayload).field("rendered_map_index").didnt_exist,
+        schema(TIRetryStatePayload).field("rendered_map_index").didnt_exist,
+    )
