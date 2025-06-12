@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,24 +15,36 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+"""
+Delete import errors.
+
+Revision ID: fe199e1abd77
+Revises: 29ce7909c52b
+Create Date: 2025-06-10 08:53:28.782896
+
+"""
+
 from __future__ import annotations
 
-import sys
-from pathlib import Path
+import sqlalchemy as sa
+from alembic import op
 
-sys.path.insert(0, str(Path(__file__).parent.resolve()))
-from common_precommit_utils import (
-    initialize_breeze_precommit,
-    run_command_via_breeze_shell,
-    validate_cmd_result,
-)
+# revision identifiers, used by Alembic.
+revision = "fe199e1abd77"
+down_revision = "29ce7909c52b"
+branch_labels = None
+depends_on = None
 
-initialize_breeze_precommit(__name__, __file__)
+airflow_version = "3.0.3"
 
-cmd_result = run_command_via_breeze_shell(
-    ["python3", "/opt/airflow/scripts/in_container/run_check_imports_in_providers.py"],
-    backend="postgres",
-    skip_environment_initialization=False,
-)
 
-validate_cmd_result(cmd_result)
+def upgrade():
+    """Apply Delete import errors."""
+    # delete import_error table rows
+    op.get_bind().execute(sa.text("DELETE FROM import_error"))
+
+
+def downgrade():
+    """Unapply Delete import errors."""
+    pass
