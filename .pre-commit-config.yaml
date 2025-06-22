@@ -581,6 +581,8 @@ repos:
             (?x)
             ^providers/airbyte/.*\.py$|
             ^providers/cohere/.*\.py$|
+            ^providers/datadog/.*\.py$|
+            ^providers/discord/.*\.py$|
             ^providers/facebook/.*\.py$|
             ^providers/grpc/.*\.py$|
             ^providers/hashicorp/.*\.py$|
@@ -590,6 +592,7 @@ repos:
             ^providers/odbc/.*\.py$|
             ^providers/openai/.*\.py$|
             ^providers/openfaas/.*\.py$|
+            ^providers/oracle/.*\.py$|
             ^providers/pgvector/.*\.py$|
             ^providers/pinecone/.*\.py$|
             ^providers/postgres/.*\.py$|
