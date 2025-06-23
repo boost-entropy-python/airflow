@@ -580,15 +580,27 @@ repos:
         files: >
             (?x)
             ^providers/airbyte/.*\.py$|
+            ^providers/apache/beam/.*\.py$|
+            ^providers/apache/flink/.*\.py$|
+            ^providers/apache/iceberg/.*\.py$|
+            ^providers/cloudant/.*\.py$|
             ^providers/cohere/.*\.py$|
+            ^providers/common/compat/.*\.py$|
+            ^providers/common/messaging/.*\.py$|
             ^providers/datadog/.*\.py$|
+            ^providers/dingding/.*\.py$|
             ^providers/discord/.*\.py$|
+            ^providers/exasol/.*\.py$|
             ^providers/facebook/.*\.py$|
+            ^providers/ftp/.*\.py$|
             ^providers/grpc/.*\.py$|
             ^providers/hashicorp/.*\.py$|
+            ^providers/imap/.*\.py$|
             ^providers/influxdb/.*\.py$|
+            ^providers/jdbc/.*\.py$|
             ^providers/jenkins/.*\.py$|
             ^providers/mongo/.*\.py$|
+            ^providers/microsoft/psrp/.*\.py$|
             ^providers/neo4j/.*\.py$|
             ^providers/odbc/.*\.py$|
             ^providers/openai/.*\.py$|
@@ -601,6 +613,7 @@ repos:
             ^providers/segment/.*\.py$|
             ^providers/sendgrid/.*\.py$|
             ^providers/singularity/.*\.py$|
+            ^providers/tableau/.*\.py$|
             ^providers/teradata/.*\.py$|
             ^providers/trino/.*\.py$|
             ^providers/vertica/.*\.py$|
