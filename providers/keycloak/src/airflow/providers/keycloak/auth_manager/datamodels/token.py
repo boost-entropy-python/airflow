@@ -1,3 +1,4 @@
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -16,25 +17,19 @@
 # under the License.
 from __future__ import annotations
 
+from pydantic import Field
 
-def remove_local_version_suffix(version_suffix: str) -> str:
-    if "+" in version_suffix:
-        return version_suffix.split("+")[0]
-    return version_suffix
+from airflow.api_fastapi.core_api.base import BaseModel, StrictBaseModel
 
 
-def is_local_package_version(version_suffix: str) -> bool:
-    """
-    Check if the given version suffix is a local version suffix. A local version suffix will contain a
-    plus sign ('+'). This function does not guarantee that the version suffix is a valid local version suffix.
+class TokenResponse(BaseModel):
+    """Token serializer for responses."""
 
-    Args:
-        version_suffix (str): The version suffix to check.
+    access_token: str
 
-    Returns:
-        bool: True if the version suffix contains a '+', False otherwise. Please note this does not
-        guarantee that the version suffix is a valid local version suffix.
-    """
-    if version_suffix and ("+" in version_suffix):
-        return True
-    return False
+
+class TokenBody(StrictBaseModel):
+    """Token serializer for post bodies."""
+
+    username: str = Field()
+    password: str = Field()
