@@ -137,6 +137,8 @@ jobs:
     needs: [update-constraints]
     if: inputs.upgrade-to-newer-dependencies == 'true' && inputs.platform == 'linux/amd64'
     name: "Dependency upgrade summary"
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: "Cleanup repo"
         shell: bash
@@ -154,7 +156,7 @@ jobs:
       - name: "Dependency upgrade summary"
         shell: bash
         run: >
-          breeze run --tty enabled uv run /opt/airflow/dev/constraints-updated-version-check.py --explain-why
+          breeze run uv run /opt/airflow/dev/constraints-updated-version-check.py --explain-why
         env:
           PYTHON_MAJOR_MINOR_VERSION: "${{ inputs.default-python-version }}"
 
