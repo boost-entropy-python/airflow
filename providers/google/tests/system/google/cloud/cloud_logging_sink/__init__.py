@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,30 +14,3 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-"""Version compatibility for Apache Beam provider."""
-
-from __future__ import annotations
-
-
-def get_base_airflow_version_tuple() -> tuple[int, int, int]:
-    from packaging.version import Version
-
-    from airflow import __version__
-
-    airflow_version = Version(__version__)
-    return airflow_version.major, airflow_version.minor, airflow_version.micro
-
-
-AIRFLOW_V_3_1_PLUS = get_base_airflow_version_tuple() >= (3, 1, 0)
-
-if AIRFLOW_V_3_1_PLUS:
-    from airflow.sdk import BaseHook, BaseOperator
-else:
-    from airflow.hooks.base import BaseHook  # type: ignore[attr-defined,no-redef]
-    from airflow.models import BaseOperator
-
-__all__ = [
-    "AIRFLOW_V_3_1_PLUS",
-    "BaseHook",
-    "BaseOperator",
-]
