@@ -16,34 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import type { ButtonProps } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
-import { AiOutlineFileSync } from "react-icons/ai";
 
-import { Button } from "src/components/ui";
-import { useDagParsing } from "src/queries/useDagParsing.ts";
+import { ChakraProvider } from "@chakra-ui/react";
+import { FC } from "react";
 
-type Props = {
-  readonly dagId: string;
-  readonly fileToken: string;
-} & ButtonProps;
+import { ColorModeProvider } from "src/context/colorMode";
+import { HomePage } from "src/pages/HomePage";
 
-const ParseDag = ({ dagId, fileToken, ...rest }: Props) => {
-  const { t: translate } = useTranslation("components");
-  const { isPending, mutate } = useDagParsing({ dagId });
+import { system } from "./theme";
 
+export interface PluginComponentProps {
+  // Add any props your plugin component needs
+}
+
+/**
+ * Main plugin component
+ */
+const PluginComponent: FC<PluginComponentProps> = (props) => {
   return (
-    <Button
-      aria-label={translate("reparseDag")}
-      loading={isPending}
-      onClick={() => mutate({ fileToken })}
-      variant="outline"
-      {...rest}
-    >
-      <AiOutlineFileSync height={5} width={5} />
-      {translate("reparseDag")}
-    </Button>
+    <ChakraProvider value={system}>
+      <ColorModeProvider>
+          <HomePage />
+      </ColorModeProvider>
+    </ChakraProvider>
   );
 };
 
-export default ParseDag;
+export default PluginComponent;

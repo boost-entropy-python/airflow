@@ -16,34 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import type { ButtonProps } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
-import { AiOutlineFileSync } from "react-icons/ai";
 
-import { Button } from "src/components/ui";
-import { useDagParsing } from "src/queries/useDagParsing.ts";
+import { Box, Button, Heading, Text, VStack } from "@chakra-ui/react";
 
-type Props = {
-  readonly dagId: string;
-  readonly fileToken: string;
-} & ButtonProps;
+import { useColorMode } from "src/context/colorMode";
 
-const ParseDag = ({ dagId, fileToken, ...rest }: Props) => {
-  const { t: translate } = useTranslation("components");
-  const { isPending, mutate } = useDagParsing({ dagId });
+export const HomePage = () => {
+  const { toggleColorMode } = useColorMode();
 
   return (
-    <Button
-      aria-label={translate("reparseDag")}
-      loading={isPending}
-      onClick={() => mutate({ fileToken })}
-      variant="outline"
-      {...rest}
-    >
-      <AiOutlineFileSync height={5} width={5} />
-      {translate("reparseDag")}
-    </Button>
+    <Box p={8} bg="bg.subtle" flexGrow={1} height="100%">
+      <VStack gap={8} align="center" justify="center" flexGrow={1} height="100%">
+        <Heading size="2xl" textAlign="center" color="fg">
+          Welcome to Your New React App!
+        </Heading>
+        <Text fontSize="lg" color="fg.muted">
+          This project was bootstrapped with the Airflow React Plugin tool.
+        </Text>
+        <Button onClick={toggleColorMode} colorPalette="blue">
+          Toggle Theme
+        </Button>
+      </VStack>
+    </Box>
   );
 };
-
-export default ParseDag;
