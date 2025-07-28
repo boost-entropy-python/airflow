@@ -1,3 +1,4 @@
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -16,20 +17,18 @@
 # under the License.
 from __future__ import annotations
 
-from datetime import datetime
+import importlib
+import re
 
-from airflow.api_fastapi.core_api.base import BaseModel
-from airflow.utils.state import DagRunState
+import pytest
+
+from airflow.exceptions import RemovedInAirflow4Warning
+from airflow.security import permissions
 
 
-class DAGRunLightResponse(BaseModel):
-    """DAG Run serializer for responses."""
-
-    id: int
-    dag_id: str
-    run_id: str
-    logical_date: datetime | None
-    run_after: datetime
-    start_date: datetime | None
-    end_date: datetime | None
-    state: DagRunState
+def test_permissions_import_warns() -> None:
+    """Ensures that imports of `airflow.security.permissions` trigger a `RemovedInAirflow4Warning`."""
+    with pytest.warns(
+        RemovedInAirflow4Warning, match=re.escape("The airflow.security.permissions module is deprecated")
+    ):
+        importlib.reload(permissions)
