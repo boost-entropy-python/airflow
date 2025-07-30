@@ -16,18 +16,12 @@
 # under the License.
 from __future__ import annotations
 
-import pytest
-from httpx import Client
-
-from tests_common.test_utils.db import AIRFLOW_V_3_1_PLUS
-
-if not AIRFLOW_V_3_1_PLUS:
-    pytest.skip("Human in the loop public API compatible with Airflow >= 3.0.1", allow_module_level=True)
-
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
+import pytest
 import time_machine
+from httpx import Client
 from uuid6 import uuid7
 
 from airflow._shared.timezones.timezone import convert_to_utc
@@ -159,7 +153,7 @@ def test_update_hitl_detail(client: Client, sample_ti: TaskInstance) -> None:
 def test_update_hitl_detail_without_ti(client: Client) -> None:
     ti_id = str(uuid7())
     response = client.patch(
-        f"/execution/hitl-details/{ti_id}",
+        f"/execution/hitlDetails/{ti_id}",
         json={
             "ti_id": ti_id,
             "chosen_options": ["Reject"],
@@ -183,7 +177,7 @@ def test_get_hitl_detail(client: Client, sample_ti: TaskInstance) -> None:
 
 
 def test_get_hitl_detail_without_ti(client: Client) -> None:
-    response = client.get(f"/execution/hitl-details/{uuid7()}")
+    response = client.get(f"/execution/hitlDetails/{uuid7()}")
     assert response.status_code == 404
     assert response.json() == {
         "detail": {
