@@ -643,6 +643,8 @@ repos:
             ^providers/segment/.*\.py$|
             ^providers/sendgrid/.*\.py$|
             ^providers/singularity/.*\.py$|
+            ^providers/slack/.*\.py$|
+            ^providers/smtp/.*\.py$|
             ^providers/tableau/.*\.py$|
             ^providers/teradata/.*\.py$|
             ^providers/trino/.*\.py$|
