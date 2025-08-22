@@ -1286,6 +1286,7 @@ export type TaskInstanceHistoryResponse = {
     queue: string | null;
     priority_weight: number | null;
     operator: string | null;
+    operator_name: string | null;
     queued_when: string | null;
     scheduled_when: string | null;
     pid: number | null;
@@ -1320,6 +1321,7 @@ export type TaskInstanceResponse = {
     queue: string | null;
     priority_weight: number | null;
     operator: string | null;
+    operator_name: string | null;
     queued_when: string | null;
     scheduled_when: string | null;
     pid: number | null;
@@ -2515,6 +2517,7 @@ export type GetMappedTaskInstancesData = {
     startDateLte?: string | null;
     state?: Array<(string)>;
     taskId: string;
+    tryNumber?: Array<(number)>;
     updatedAtGte?: string | null;
     updatedAtLte?: string | null;
     versionNumber?: Array<(number)>;
@@ -2603,6 +2606,7 @@ export type GetTaskInstancesData = {
      */
     taskDisplayNamePattern?: string | null;
     taskId?: string | null;
+    tryNumber?: Array<(number)>;
     updatedAtGte?: string | null;
     updatedAtLte?: string | null;
     versionNumber?: Array<(number)>;
