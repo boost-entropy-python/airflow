@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -14,29 +15,30 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
+# /// script
+# requires-python = ">=3.10"
+# dependencies = [
+#   "packaging>=25",
+# ]
+# ///
 from __future__ import annotations
 
-from pydantic import JsonValue, RootModel
+import sys
+from pathlib import Path
 
-from airflow.api_fastapi.core_api.base import BaseModel
+sys.path.insert(0, str(Path(__file__).parent.resolve()))
+from common_prek_utils import (
+    initialize_breeze_prek,
+    run_command_via_breeze_shell,
+    validate_cmd_result,
+)
 
+initialize_breeze_prek(__name__, __file__)
 
-class XComResponse(BaseModel):
-    """XCom schema for responses with fields that are needed for Runtime."""
+cmd_result = run_command_via_breeze_shell(
+    ["python3", "/opt/airflow/scripts/in_container/run_schema_defaults_check.py"],
+    backend="sqlite",
+    warn_image_upgrade_needed=True,
+)
 
-    key: str
-    value: JsonValue
-    """The returned XCom value in a JSON-compatible format."""
-
-
-class XComSequenceIndexResponse(RootModel):
-    """XCom schema with minimal structure for index-based access."""
-
-    root: JsonValue
-
-
-class XComSequenceSliceResponse(RootModel):
-    """XCom schema with minimal structure for slice-based access."""
-
-    root: list[JsonValue]
+validate_cmd_result(cmd_result, include_ci_env_check=True)
