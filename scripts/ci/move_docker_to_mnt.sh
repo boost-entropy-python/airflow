@@ -1,4 +1,4 @@
-#
+#!/usr/bin/env bash
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,20 +15,27 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-from __future__ import annotations
+function cleanup_runner {
+    set -x
+    local target_docker_volume_location="/mnt/var-lib-docker"
+    echo "Checking free space!"
+    df -H
+    # This is faster than docker prune
+    echo "Stopping docker"
+    sudo systemctl stop docker
+    echo "Checking free space!"
+    df -H
+    echo "Cleaning docker"
+    sudo rm -rf /var/lib/docker
+    echo "Checking free space!"
+    df -H
+    echo "Mounting ${target_docker_volume_location} to /var/lib/docker"
+    sudo mkdir -p "${target_docker_volume_location}" /var/lib/docker
+    sudo mount --bind "${target_docker_volume_location}" /var/lib/docker
+    sudo chown -R 0:0 "${target_docker_volume_location}"
+    sudo systemctl start docker
+    echo "Checking free space!"
+    df -H
+}
 
-from typing import TYPE_CHECKING
-
-import airflow.executors.executor_loader as executor_loader
-
-if TYPE_CHECKING:
-    from airflow.executors.executor_utils import ExecutorName
-
-
-def clean_executor_loader_module():
-    """Clean the executor_loader state, as it stores global variables in the module, causing side effects for some tests."""
-    executor_loader._alias_to_executors: dict[str, ExecutorName] = {}
-    executor_loader._module_to_executors: dict[str, ExecutorName] = {}
-    executor_loader._team_name_to_executors: dict[str | None, ExecutorName] = {}
-    executor_loader._classname_to_executors: dict[str, ExecutorName] = {}
-    executor_loader._executor_names: list[ExecutorName] = []
+cleanup_runner
