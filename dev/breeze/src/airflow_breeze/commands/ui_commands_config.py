@@ -14,23 +14,24 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-[build-system]
-requires = ["flit_core==3.12.0"]
-build-backend = "flit_core.buildapi"
+from __future__ import annotations
 
-[project]
-name = "apache-airflow-performance"
-version = "0.1.0"
-requires-python = ">=3.10,!=3.14"
-description = "Performance testing utilities and DAGs for Apache Airflow"
-readme = { file = "README.md", content-type = "text/markdown" }
-license = "Apache-2.0"
-dependencies = [
-    "apache-airflow>=3.1.3",
-]
-authors = [
-    { name = "Apache Software Foundation", email = "dev@airflow.apache.org" },
-]
-classifiers = [
-    "Private :: Do Not Upload",
-]
+UI_COMMANDS: dict[str, str | list[str]] = {
+    "name": "UI commands",
+    "commands": [
+        "check-translation-completeness",
+    ],
+}
+
+UI_PARAMETERS: dict[str, list[dict[str, str | list[str]]]] = {
+    "breeze ui check-translation-completeness": [
+        {
+            "name": "Translation options",
+            "options": [
+                "--language",
+                "--add-missing",
+                "--remove-extra",
+            ],
+        },
+    ],
+}
