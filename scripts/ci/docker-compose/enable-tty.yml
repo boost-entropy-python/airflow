@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,14 +14,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-# Generate mprocs configuration dynamically
-
-MPROCS_CONFIG_PATH="/files/mprocs.yaml"
-
-if ! uv run "/opt/airflow/scripts/in_container/bin/generate_mprocs_config.py" "${MPROCS_CONFIG_PATH}"; then
-    echo "Failed to generate mprocs configuration"
-    exit 1
-fi
-
-# Start mprocs with the generated configuration
-exec mprocs --config "${MPROCS_CONFIG_PATH}" --proc-list-title "Apache Airflow"
+---
+services:
+  airflow:
+    tty: true  # docker run -t
