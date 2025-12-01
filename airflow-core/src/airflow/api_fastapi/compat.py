@@ -16,5 +16,11 @@
 # under the License.
 from __future__ import annotations
 
-# Re export for compat
-from airflow._shared.secrets_backend.base import BaseSecretsBackend as BaseSecretsBackend
+try:
+    from starlette.status import HTTP_422_UNPROCESSABLE_CONTENT
+except ImportError:
+    from starlette.status import (  # type: ignore[no-redef]
+        HTTP_422_UNPROCESSABLE_ENTITY as HTTP_422_UNPROCESSABLE_CONTENT,
+    )
+
+__all__ = ["HTTP_422_UNPROCESSABLE_CONTENT"]
