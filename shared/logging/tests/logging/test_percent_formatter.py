@@ -1,3 +1,4 @@
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -14,19 +15,17 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
----
-default_stages: [pre-commit, pre-push]
-minimum_prek_version: '0.2.0'
-default_language_version:
-  python: python3
-  node: 22.19.0
-  golang: 1.24.0
-repos:
-  - repo: local
-    hooks:
-      - id: check-common-compat-sdk-imports-in-sync
-        name: Check common.compat sdk TYPE_CHECKING matches runtime maps
-        language: python
-        files: ^src/airflow/providers/common/compat/sdk\.py$
-        pass_filenames: false
-        entry: ../../../scripts/ci/prek/check_common_compat_lazy_imports.py
+from __future__ import annotations
+
+from unittest import mock
+
+from airflow_shared.logging.percent_formatter import PercentFormatRender
+
+
+class TestPercentFormatRender:
+    def test_no_callsite(self):
+        fmter = PercentFormatRender("%(filename)s:%(lineno)d %(message)s")
+
+        formatted = fmter(mock.Mock(name="Logger"), "info", {"event": "our msg"})
+
+        assert formatted == "(unknown file):0 our msg"
