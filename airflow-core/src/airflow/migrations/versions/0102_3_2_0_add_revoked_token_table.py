@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,19 +15,40 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-set -euxo pipefail
 
-cd "$( dirname "${BASH_SOURCE[0]}" )/../../"
+"""
+Add revoked_token table.
 
-PYTHON_ARG=""
+Revision ID: 53ff648b8a26
+Revises: a5a3e5eb9b8d
+Create Date: 2026-02-01 00:00:00.000000
 
-PIP_VERSION="26.0.1"
-if [[ ${PYTHON_VERSION=} != "" ]]; then
-    PYTHON_ARG="--python=$(which python"${PYTHON_VERSION}") "
-fi
+"""
 
-python -m pip install --upgrade "pip==${PIP_VERSION}"
-uv tool uninstall apache-airflow-breeze >/dev/null 2>&1 || true
-# shellcheck disable=SC2086
-uv tool install ${PYTHON_ARG} --force --editable ./dev/breeze/
-echo '/home/runner/.local/bin' >> "${GITHUB_PATH}"
+from __future__ import annotations
+
+import sqlalchemy as sa
+from alembic import op
+
+from airflow.utils.sqlalchemy import UtcDateTime
+
+# revision identifiers, used by Alembic.
+revision = "53ff648b8a26"
+down_revision = "a5a3e5eb9b8d"
+branch_labels = None
+depends_on = None
+airflow_version = "3.2.0"
+
+
+def upgrade():
+    """Add revoked_token table."""
+    op.create_table(
+        "revoked_token",
+        sa.Column("jti", sa.String(32), primary_key=True, nullable=False),
+        sa.Column("exp", UtcDateTime, nullable=False, index=True),
+    )
+
+
+def downgrade():
+    """Drop revoked_token table."""
+    op.drop_table("revoked_token")
