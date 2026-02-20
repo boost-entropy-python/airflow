@@ -1,3 +1,4 @@
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,26 +16,35 @@
 # specific language governing permissions and limitations
 # under the License.
 
+"""
+Add allowed_run_types to dag.
+
+Revision ID: e42d9fcd10d9
+Revises: f8c9d7e6b5a4
+Create Date: 2026-02-12 11:49:40.753440
+
+"""
+
 from __future__ import annotations
 
-from pydantic import Field
+import sqlalchemy as sa
+from alembic import op
 
-from airflow.api_fastapi.common.types import UtcDateTime
-from airflow.api_fastapi.core_api.base import BaseModel, StrictBaseModel
-from airflow.utils.state import DagRunState
-
-
-class TriggerDAGRunPayload(StrictBaseModel):
-    """Schema for Trigger DAG Run API request."""
-
-    logical_date: UtcDateTime | None = None
-    conf: dict = Field(default_factory=dict)
-    reset_dag_run: bool = False
-    partition_key: str | None = None
-    note: str | None = None
+# revision identifiers, used by Alembic.
+revision = "e42d9fcd10d9"
+down_revision = "f8c9d7e6b5a4"
+branch_labels = None
+depends_on = None
+airflow_version = "3.2.0"
 
 
-class DagRunStateResponse(BaseModel):
-    """Schema for DAG Run State response."""
+def upgrade():
+    """Add allowed_run_types column to dag table."""
+    with op.batch_alter_table("dag", schema=None) as batch_op:
+        batch_op.add_column(sa.Column("allowed_run_types", sa.JSON(), nullable=True))
 
-    state: DagRunState
+
+def downgrade():
+    """Remove allowed_run_types column from dag table."""
+    with op.batch_alter_table("dag", schema=None) as batch_op:
+        batch_op.drop_column("allowed_run_types")
