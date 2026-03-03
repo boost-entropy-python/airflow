@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,26 +14,3 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
-# This is an example docker build script. It is not intended for PRODUCTION use
-set -euo pipefail
-AIRFLOW_SOURCES="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../" && pwd)"
-
-TEMP_DOCKER_DIR=$(mktemp -d)
-pushd "${TEMP_DOCKER_DIR}"
-
-cp "${AIRFLOW_SOURCES}/Dockerfile" "${TEMP_DOCKER_DIR}"
-
-# [START build]
-export AIRFLOW_VERSION=3.0.3
-export DOCKER_BUILDKIT=1
-
-docker build . \
-    --build-arg BASE_IMAGE="debian:bookworm-slim" \
-    --build-arg AIRFLOW_PYTHON_VERSION="3.12.13" \
-    --build-arg AIRFLOW_VERSION="${AIRFLOW_VERSION}" \
-    --tag "my-pypi-selected-version:0.0.1"
-# [END build]
-docker rmi --force "my-pypi-selected-version:0.0.1"
-popd
-rm -rf "${TEMP_DOCKER_DIR}"

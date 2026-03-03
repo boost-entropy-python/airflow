@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,26 +14,22 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+"""Toolsets for exposing Airflow hooks as pydantic-ai agent tools."""
 
-# This is an example docker build script. It is not intended for PRODUCTION use
-set -euo pipefail
-AIRFLOW_SOURCES="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../" && pwd)"
+from __future__ import annotations
 
-TEMP_DOCKER_DIR=$(mktemp -d)
-pushd "${TEMP_DOCKER_DIR}"
+from airflow.providers.common.ai.toolsets.hook import HookToolset
 
-cp "${AIRFLOW_SOURCES}/Dockerfile" "${TEMP_DOCKER_DIR}"
+__all__ = ["HookToolset", "SQLToolset"]
 
-# [START build]
-export AIRFLOW_VERSION=3.0.3
-export DOCKER_BUILDKIT=1
 
-docker build . \
-    --build-arg BASE_IMAGE="debian:bookworm-slim" \
-    --build-arg AIRFLOW_PYTHON_VERSION="3.12.13" \
-    --build-arg AIRFLOW_VERSION="${AIRFLOW_VERSION}" \
-    --tag "my-pypi-selected-version:0.0.1"
-# [END build]
-docker rmi --force "my-pypi-selected-version:0.0.1"
-popd
-rm -rf "${TEMP_DOCKER_DIR}"
+def __getattr__(name: str):
+    if name == "SQLToolset":
+        try:
+            from airflow.providers.common.ai.toolsets.sql import SQLToolset
+        except ImportError as e:
+            from airflow.providers.common.compat.sdk import AirflowOptionalProviderFeatureException
+
+            raise AirflowOptionalProviderFeatureException(e)
+        return SQLToolset
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
