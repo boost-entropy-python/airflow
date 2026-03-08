@@ -931,7 +931,7 @@ jobs:
     steps:
       - name: Notify Slack
         id: slack
-        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d  # v2.0.0
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a  # v2.1.1
         with:
           method: chat.postMessage
           token: ${{ env.SLACK_BOT_TOKEN }}
@@ -992,7 +992,7 @@ jobs:
             --pattern "**/warnings-*.txt" \
             --output ./files
       - name: "Upload artifact for summarized warnings"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
         with:
           name: "test-summarized-warnings"
           path: ./files/warn-summary-*.txt
