@@ -14,40 +14,21 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
-[project]
-name = "apache-airflow-shared-serialization"
-description = "Shared serialization constants for Airflow distributions"
-version = "0.0"
-classifiers = [
-    "Private :: Do Not Upload",
-]
-
-dependencies = []
-
-[dependency-groups]
-dev = [
-    "apache-airflow-devel-common",
-]
-
-[build-system]
-requires = [
-    "hatchling==1.29.0",
-    "packaging==26.0",
-    "pathspec==1.0.4",
-    "pluggy==1.6.0",
-    "tomli==2.4.1; python_version < '3.11'",
-    "trove-classifiers==2026.1.14.14",
-]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/airflow_shared"]
-
-[tool.ruff]
-extend = "../../pyproject.toml"
-src = ["src"]
-
-[tool.ruff.lint.per-file-ignores]
-# Ignore Doc rules et al for anything outside of tests
-"!src/*" = ["D", "S101", "TRY002"]
+---
+name: "ASF Allowlist Check"
+"on":
+  pull_request:
+    paths: [".github/**"]
+  push:
+    branches: [main, v*-test]
+    paths: [".github/**"]
+permissions:
+  contents: read
+jobs:
+  asf-allowlist-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: apache/infrastructure-actions/allowlist-check@493edcdbd80d9e78a767f256a877b1cc6c9712ba  # main
