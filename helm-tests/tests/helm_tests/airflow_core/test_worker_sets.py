@@ -3093,6 +3093,13 @@ class TestWorkerSets:
                     "sets": [{"name": "set1", "annotations": {"test": "echo"}}],
                 },
             },
+            {
+                "celery": {
+                    "enableDefault": False,
+                    "annotations": {"echo": "test"},
+                    "sets": [{"name": "set1", "annotations": {"test": "echo"}}],
+                },
+            },
         ],
     )
     def test_overwrite_annotations(self, workers_values):
@@ -3116,6 +3123,13 @@ class TestWorkerSets:
                 "podAnnotations": {"echo": "test"},
                 "celery": {
                     "enableDefault": False,
+                    "sets": [{"name": "set1", "podAnnotations": {"test": "echo"}}],
+                },
+            },
+            {
+                "celery": {
+                    "enableDefault": False,
+                    "podAnnotations": {"echo": "test"},
                     "sets": [{"name": "set1", "podAnnotations": {"test": "echo"}}],
                 },
             },
