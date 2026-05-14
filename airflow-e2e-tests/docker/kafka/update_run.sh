@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,41 +17,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
-[project]
-name = "apache-airflow-shared-state"
-description = "Shared task and asset state abstractions for Airflow distributions"
-version = "0.0"
-classifiers = [
-    "Private :: Do Not Upload",
-]
+# Docker workaround: Remove check for KAFKA_ZOOKEEPER_CONNECT parameter
+sed -i '/KAFKA_ZOOKEEPER_CONNECT/d' /etc/confluent/docker/configure
 
-dependencies = []
+# Docker workaround: Ignore cub zk-ready
+sed -i 's/cub zk-ready/echo ignore zk-ready/' /etc/confluent/docker/ensure
 
-[dependency-groups]
-dev = [
-    "apache-airflow-devel-common",
-]
-mypy = [
-    "apache-airflow-devel-common[mypy]",
-]
-
-[build-system]
-requires = [
-    "hatchling==1.29.0",
-    "packaging==26.2",
-    "pathspec==1.1.1",
-    "pluggy==1.6.0",
-    "tomli==2.4.1; python_version < '3.11'",
-    "trove-classifiers==2026.5.7.17",
-]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/airflow_shared"]
-
-[tool.ruff]
-extend = "../../pyproject.toml"
-src = ["src"]
-
-[tool.ruff.lint.per-file-ignores]
-"!src/*" = ["D", "S101", "TRY002"]
+# KRaft required step: Format the storage directory with a new cluster ID
+echo "kafka-storage format --ignore-formatted --cluster-id=$(kafka-storage random-uuid) -c /etc/kafka/kafka.properties" >> /etc/confluent/docker/ensure
