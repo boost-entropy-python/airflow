@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,27 +14,24 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-# /// script
-# requires-python = ">=3.10,<3.11"
-# dependencies = [
-#   "rich>=13.6.0",
-#   "ruff==0.15.13",
-# ]
-# ///
 from __future__ import annotations
 
-from common_prek_utils import (
-    initialize_breeze_prek,
-    run_command_via_breeze_shell,
-    validate_cmd_result,
-)
+import attrs
 
-initialize_breeze_prek(__name__, __file__)
 
-cmd_result = run_command_via_breeze_shell(
-    ["python3", "/opt/airflow/scripts/in_container/run_check_imports_in_providers.py"],
-    backend="sqlite",
-    skip_environment_initialization=False,
-)
+def _validate_producer_teams(instance, attribute, value):
+    for entry in value:
+        if not isinstance(entry, str) or not entry or entry.isspace():
+            raise ValueError("Each entry in producer_teams must be a non-empty string")
+    return value
 
-validate_cmd_result(cmd_result)
+
+@attrs.define
+class AssetAccessControl:
+    """Access control configuration for an Asset."""
+
+    producer_teams: list[str] = attrs.field(
+        factory=list,
+        validator=[_validate_producer_teams],
+    )
+    allow_global: bool = attrs.field(default=True, validator=[attrs.validators.instance_of(bool)])
