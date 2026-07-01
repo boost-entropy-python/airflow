@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,27 +15,28 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-# /// script
-# requires-python = ">=3.10,<3.11"
-# dependencies = [
-#   "rich>=13.6.0",
-#   "ruff==0.15.19",
-# ]
-# ///
+
 from __future__ import annotations
 
-from common_prek_utils import (
-    initialize_breeze_prek,
-    run_command_via_breeze_run,
-    validate_cmd_result,
-)
+from airflow.providers.amazon.aws.hooks.base_aws import AwsBaseHook
 
-initialize_breeze_prek(__name__, __file__)
 
-cmd_result = run_command_via_breeze_run(
-    ["python3", "/opt/airflow/scripts/in_container/run_check_imports_in_providers.py"],
-    backend="sqlite",
-    skip_environment_initialization=False,
-)
+class NeptuneAnalyticsHook(AwsBaseHook):
+    """
+    Interact with Amazon Neptune Analytics.
 
-validate_cmd_result(cmd_result)
+    Additional arguments (such as ``aws_conn_id``) may be specified and
+    are passed down to the underlying AwsBaseHook.
+
+    .. seealso::
+        - :class:`~airflow.providers.amazon.aws.hooks.base_aws.AwsBaseHook`
+    """
+
+    def __init__(self, *args, **kwargs):
+        kwargs["client_type"] = "neptune-graph"
+        super().__init__(*args, **kwargs)
+
+    def _get_graph_endpoint_id(self, graph_id: str, vpc_id: str):
+        """Return the vpc endpoint id for this graph."""
+        result = self.conn.get_private_graph_endpoint(graphIdentifier=graph_id, vpcId=vpc_id)
+        return result.get("vpcEndpointId")

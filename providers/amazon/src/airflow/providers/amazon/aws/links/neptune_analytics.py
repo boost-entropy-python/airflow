@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,27 +14,29 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-# /// script
-# requires-python = ">=3.10,<3.11"
-# dependencies = [
-#   "rich>=13.6.0",
-#   "ruff==0.15.19",
-# ]
-# ///
 from __future__ import annotations
 
-from common_prek_utils import (
-    initialize_breeze_prek,
-    run_command_via_breeze_run,
-    validate_cmd_result,
-)
+from airflow.providers.amazon.aws.links.base_aws import BASE_AWS_CONSOLE_LINK, BaseAwsLink
 
-initialize_breeze_prek(__name__, __file__)
 
-cmd_result = run_command_via_breeze_run(
-    ["python3", "/opt/airflow/scripts/in_container/run_check_imports_in_providers.py"],
-    backend="sqlite",
-    skip_environment_initialization=False,
-)
+class NeptuneGraphLink(BaseAwsLink):
+    """Helper class for constructing an Amazon Neptune Analytics Graph Link."""
 
-validate_cmd_result(cmd_result)
+    name = "Neptune Graph"
+    key = "_neptune_graph"
+    format_str = (
+        BASE_AWS_CONSOLE_LINK
+        + "/neptune/home?region={region_name}#analytics-graph-details:id={graph_id}"
+        + ";tab=connectivity"
+    )
+
+
+class NeptuneImportTaskLink(BaseAwsLink):
+    """Helper class for constructing an Amazon Neptune Analytics import task link."""
+
+    name = "Neptune Import Task"
+    key = "_import_task"
+    format_str = (
+        BASE_AWS_CONSOLE_LINK
+        + "/neptune/home?region={region_name}#analytics-import-task-details:id={import_task_id}"
+    )
