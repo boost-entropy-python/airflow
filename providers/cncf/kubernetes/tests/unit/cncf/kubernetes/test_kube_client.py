@@ -16,33 +16,24 @@
 # under the License.
 from __future__ import annotations
 
-from typing import Literal
+from unittest import mock
 
-from airflow.api_fastapi.core_api.datamodels.ui.common import (
-    BaseEdgeResponse,
-    BaseGraphResponse,
-    BaseNodeResponse,
-)
+import pytest
 
+from airflow.providers.cncf.kubernetes.kube_client import _TimeoutAsyncK8sApiClient, get_async_kube_client
 
-class EdgeResponse(BaseEdgeResponse):
-    """Edge serializer for responses."""
-
-    is_setup_teardown: bool | None = None
-    label: str | None = None
+from tests_common.test_utils.config import conf_vars
 
 
-class NodeResponse(BaseNodeResponse):
-    """Node serializer for responses."""
+class TestGetAsyncKubeClient:
+    @pytest.mark.asyncio
+    @mock.patch("kubernetes_asyncio.config.load_incluster_config")
+    async def test_wraps_client_with_request_timeout(self, mock_load_incluster):
+        """The async client carries the shared client-side request-timeout wrapper."""
+        with conf_vars(
+            {("kubernetes_executor", "verify_ssl"): "True", ("kubernetes_executor", "ssl_ca_cert"): ""}
+        ):
+            api = await get_async_kube_client(in_cluster=True)
 
-    children: list[NodeResponse] | None = None
-    is_mapped: bool | None = None
-    tooltip: str | None = None
-    setup_teardown_type: Literal["setup", "teardown"] | None = None
-    operator: str | None = None
-    ui_color: str | None = None
-    ui_fgcolor: str | None = None
-
-
-class StructureDataResponse(BaseGraphResponse[EdgeResponse, NodeResponse]):
-    """Structure Data serializer for responses."""
+        assert isinstance(api.api_client, _TimeoutAsyncK8sApiClient)
+        mock_load_incluster.assert_called_once()
