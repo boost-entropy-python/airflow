@@ -14,23 +14,3 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-from __future__ import annotations
-
-from pydantic import BaseModel
-
-from airflow.api_fastapi.auth.managers.models.base_user import BaseUser
-
-
-class KeycloakAuthManagerUser(BaseModel, BaseUser):
-    """User model for users managed by Keycloak auth manager."""
-
-    user_id: str
-    name: str
-    access_token: str
-    refresh_token: str | None
-
-    def get_id(self) -> str:
-        return self.user_id
-
-    def get_name(self) -> str:
-        return self.name
