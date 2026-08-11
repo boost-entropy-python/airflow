@@ -16,12 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { SearchParamsKeys } from "src/constants/searchParams";
+import { useShowTeam } from "src/hooks/useShowTeam";
 
-export { registerTask, listRegisteredTasks } from "./sdk/registry.js";
-export { ConnectionNotFoundError, VariableNotFoundError } from "./sdk/client.js";
-export { startCoordinator, SUPERVISOR_API_VERSION } from "./coordinator/index.js";
-export type { TaskClient } from "./sdk/client.js";
-export type { ConnectionResult, GetXComOpts, JsonValue, SetXComOpts } from "./sdk/client-types.js";
-export type { StartCoordinatorOptions } from "./coordinator/index.js";
-export type { TaskRegistration } from "./sdk/registry.js";
-export type { TaskContext, TaskHandler, TaskHandlerArgs } from "./sdk/task.js";
+import { RouterLink } from "./ui";
+
+type Props = {
+  readonly teamName?: string | null;
+};
+
+export const TeamName = ({ teamName }: Props) => {
+  const showTeam = useShowTeam(teamName);
+
+  if (!showTeam) {
+    return undefined;
+  }
+
+  return (
+    <RouterLink to={`/dags?${SearchParamsKeys.TEAMS}=${encodeURIComponent(teamName as string)}`}>
+      {teamName}
+    </RouterLink>
+  );
+};

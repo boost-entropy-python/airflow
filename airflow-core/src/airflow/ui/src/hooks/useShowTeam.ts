@@ -16,12 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { useConfig } from "src/queries/useConfig";
 
-export { registerTask, listRegisteredTasks } from "./sdk/registry.js";
-export { ConnectionNotFoundError, VariableNotFoundError } from "./sdk/client.js";
-export { startCoordinator, SUPERVISOR_API_VERSION } from "./coordinator/index.js";
-export type { TaskClient } from "./sdk/client.js";
-export type { ConnectionResult, GetXComOpts, JsonValue, SetXComOpts } from "./sdk/client-types.js";
-export type { StartCoordinatorOptions } from "./coordinator/index.js";
-export type { TaskRegistration } from "./sdk/registry.js";
-export type { TaskContext, TaskHandler, TaskHandlerArgs } from "./sdk/task.js";
+/**
+ * Whether a team should be surfaced at all: teams only exist in multi-team
+ * deployments, and an entity may not be owned by any team.
+ */
+export const useShowTeam = (teamName?: string | null) =>
+  Boolean(useConfig("multi_team")) && teamName !== undefined && teamName !== null;
