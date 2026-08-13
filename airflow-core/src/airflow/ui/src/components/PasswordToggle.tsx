@@ -16,30 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import type { IconButtonProps } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { FiAlignJustify, FiGrid } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
-import { ButtonGroupToggle } from "src/components/ui/ButtonGroupToggle";
-
-type Display = "card" | "table";
+import { IconButton } from "src/components/ui";
 
 type Props = {
-  readonly display: Display;
-  readonly setDisplay: (display: Display) => void;
-};
+  readonly isVisible: boolean;
+  readonly onToggle: () => void;
+} & IconButtonProps;
 
-export const ToggleTableDisplay = ({ display, setDisplay }: Props) => {
+export const PasswordToggle = ({ isVisible, onToggle, ...rest }: Props) => {
   const { t: translate } = useTranslation("components");
 
   return (
-    <ButtonGroupToggle
-      isIcon
-      onChange={setDisplay}
-      options={[
-        { label: <FiGrid />, title: translate("toggleCardView"), value: "card" },
-        { label: <FiAlignJustify />, title: translate("toggleTableView"), value: "table" },
-      ]}
-      value={display}
-    />
+    <IconButton
+      label={isVisible ? translate("passwordToggle.hide") : translate("passwordToggle.show")}
+      onClick={onToggle}
+      size="xs"
+      {...rest}
+    >
+      {isVisible ? <FiEye size={15} /> : <FiEyeOff size={15} />}
+    </IconButton>
   );
 };
