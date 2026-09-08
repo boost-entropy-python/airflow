@@ -16,10 +16,13 @@
 # under the License.
 from __future__ import annotations
 
+from airflow.providers.snowflake.utils.snowpark_containers import (
+    NON_TERMINAL_STATUSES,
+    TERMINAL_STATUSES,
+    SnowparkContainerJobStatus,
+)
 
-def get_normalized_platform(single_platform: str) -> str:
-    """
-    Replace different platform variants of the platform provided platforms with the two canonical ones we
-    are using: linux/amd64 and linux/arm64.
-    """
-    return single_platform.replace("x86_64", "amd64").replace("aarch64", "arm64")
+
+def test_each_status_is_terminal_or_non_terminal():
+    assert TERMINAL_STATUSES.isdisjoint(NON_TERMINAL_STATUSES)
+    assert set(SnowparkContainerJobStatus) == TERMINAL_STATUSES | NON_TERMINAL_STATUSES
