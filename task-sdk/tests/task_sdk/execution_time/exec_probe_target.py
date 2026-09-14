@@ -14,21 +14,17 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+"""Importable entry point for the fork+exec end-to-end test; it runs inside the exec'd child."""
+
 from __future__ import annotations
 
+import sys
 
-class CloudantV1:
-    """Phony class to pass mypy when real class is not imported."""
-
-    def __init__(self, authenticator):
-        pass
-
-    def set_service_url(self, service_url: str):
-        pass
+from airflow.sdk.execution_time.comms import CommsDecoder
 
 
-class CouchDbSessionAuthenticator:
-    """Phony class to pass mypy when real class is not imported."""
-
-    def __init__(self, username: str, password: str):
-        pass
+def exec_probe_main() -> None:
+    """Stand-in for ``_subprocess_main``: consume the startup message, then report over stdout."""
+    CommsDecoder()._get_response()
+    print("exec-probe-ok")
+    sys.stdout.flush()
