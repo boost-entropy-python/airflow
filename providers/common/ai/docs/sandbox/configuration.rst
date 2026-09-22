@@ -42,8 +42,8 @@ being in force.
         ),
     )
 
-**Network.** Three modes exist. ``block_network=True``, the default, drops all
-outbound traffic including name resolution. On Modal it maps onto the sandbox's
+**Network.** ``block_network=True``, the default, drops all outbound traffic
+including name resolution. On Modal it maps onto the sandbox's
 own ``block_network`` flag. ``sbx`` has no per-sandbox enforcement of it at all:
 egress there is a host-level ``sbx policy``, so the backend honors the default by
 refusing to provision unless the Deployment Manager has declared
@@ -56,8 +56,14 @@ since a local rule can narrow egress and never widen it, and Modal matches
 hostnames in the TLS handshake, which is weaker than it sounds and has to be
 opted into with ``egress_enforcement="sni"`` (see
 :ref:`the Modal backend <sandbox-backend-modal>` for exactly what it does and does
-not stop). ``block_network=False`` opens outbound access; on Modal the cloud
-metadata endpoint and private address ranges stay unreachable even then.
+not stop). ``allow_egress_to_cidrs`` names address ranges instead, and on Modal it
+is enforced on the destination address for any port, so it needs no opt-in; it is
+the mode for one service at a fixed public IPv4 address, and ``sbx`` refuses it. A
+private address is unreachable from a hosted sandbox whether or not it is listed.
+The two lists can be set together, and traffic matching either is allowed, which
+weakens the address list on port 443.
+``block_network=False`` opens outbound access; on Modal the cloud metadata
+endpoint and private address ranges stay unreachable even then.
 
 **Packages.** A default sandbox has the Python standard library and no network,
 so an agent that reaches for ``pip install`` gets a DNS failure in a few seconds.
@@ -239,19 +245,32 @@ lifetime. Human output review is not part of the run: it starts after the agent
 has finished and the sandbox has been destroyed, so a review pause costs no
 sandbox time and keeps no files.
 
+**A failed provisioning fails the task.** The model has no input into ``create``:
+it takes only the spec, which is fixed in the Dag file. So whatever a backend
+raises while provisioning is treated as terminal, even a ``SandboxError`` that
+would have been a model retry from a tool call. The task fails and Airflow's own
+retry attempts the provisioning again, instead of the model spending its retry
+budget on an image tag or a credential it cannot see.
+
 **Nothing survives the run.** A task retry starts from an empty sandbox, and so
-does every other attempt. Two operator features assume otherwise and must not be
-combined with a sandbox today, because neither is rejected:
+does every other attempt. Two operator features assume otherwise, and
+``AgentOperator`` refuses each of them at construction when any toolset, including
+one nested inside ``.prefixed()``, a combined toolset or a ``Toolset`` capability,
+is a ``SandboxToolset``:
 
 - ``durable=True`` caches each tool result and replays it on a retry without
-  calling the backend, so a replayed ``write_file`` reports success while no
-  sandbox exists, and the first call that misses the cache runs against a fresh
-  empty one. The model is handed a filesystem that does not match what it was just
-  told, and nothing raises.
+  calling the backend, so a replayed ``write_file`` would report success while no
+  sandbox exists, and the first call that misses the cache would run against a
+  fresh empty one.
 - ``enable_hitl_review=True`` regenerates after reviewer feedback by starting a
   second agent run, and the first run's sandbox was destroyed when that run ended.
-  The regenerated agent gets an empty sandbox while its own history describes
+  The regenerated agent would get an empty sandbox while its own history describes
   files it wrote earlier.
+
+The two ways out are dropping the flag, or moving the sandbox work into its own
+task and keeping the durable or reviewed agent free of sandbox tools. A toolset
+resolved per run from a callable cannot be inspected when the operator is built,
+so it is the one composition the check does not see.
 
 Cost and operations
 -------------------
